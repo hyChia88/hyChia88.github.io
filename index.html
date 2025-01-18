@@ -5,108 +5,176 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chia Hui Yen | Portfolio</title>
     <style>
-        /* [Previous root and general styles remain the same] */
-
-        .page-wrapper {
+        :root {
+            --primary-color: #2c3e50;
+            --hover-color: #3498db;
+            --bg-color: #ffffff;
+            --text-color: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Times New Roman", Times, serif;
+        }
+        
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            line-height: 1.6;
         }
-
+        
         .container {
             text-align: center;
             max-width: 600px;
             width: 100%;
-            margin: auto;
-            padding: 2rem;
-            flex-grow: 1;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+        
+        .professional-title {
+            font-size: 1.0rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+        
+        .education {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .expertise {
+            font-size: 0.8rem;
+            color: var(--text-color);
+            margin-bottom: 3rem;
         }
 
-        /* [Previous header and button styles remain the same] */
+        .portfolio-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
 
-        .footer {
+        .portfolio-item {
             width: 100%;
-            padding: 2rem 0;
-            margin-top: 3rem;
-            border-top: 1px solid rgba(44, 62, 80, 0.1);
+            max-width: 400px;
+            text-decoration: none;
+            color: var(--text-color);
+            background: rgba(44, 62, 80, 0.03);
+            padding: 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(44, 62, 80, 0.1);
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-2px);
+            background: rgba(44, 62, 80, 0.05);
+            border-color: rgba(44, 62, 80, 0.2);
+        }
+
+        .portfolio-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .portfolio-description {
+            font-size: 0.9rem;
+            color: rgba(44, 62, 80, 0.8);
+            margin-top: 0.5rem;
         }
 
         .social-links {
+            margin-top: 2rem;
             display: flex;
             justify-content: center;
-            gap: 3rem;
-            font-size: 0.95rem;
-            font-weight: 500;
+            gap: 2rem;
         }
 
         .social-link {
-            color: var(--primary-color);
+            color: var(--text-color);
             text-decoration: none;
+            font-size: 0.9rem;
             opacity: 0.8;
             transition: all 0.3s ease;
-            display: inline-flex;
+            display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
         .social-link:hover {
             opacity: 1;
-            color: var(--hover-color);
             transform: translateY(-1px);
         }
 
-        .social-link .icon-small {
-            font-size: 1.1rem;
-        }
-
         @media (max-width: 480px) {
-            .footer {
-                padding: 1.5rem 0;
+            body {
+                padding: 1rem;
             }
             
-            .social-links {
-                gap: 2rem;
-                font-size: 0.9rem;
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .portfolio-item {
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="page-wrapper">
-        <div class="container">
-            <header>
-                <h1>Chia Hui Yen</h1>
-                <div class="professional-title">Computational Designer | Software Engineer | Maker</div>
-                <div class="education">M.S. in Computational Design @ Carnegie Mellon University</div>
-                <div class="expertise">Architectural Background | Technical Expertise | Creative Problem-Solving</div>
-            </header>
+    <div class="container">
+        <h1>Chia Hui Yen</h1>
+        <div class="professional-title">Computational Designer | Software Engineer | Maker</div>
+        <div class="education">M.S. in Computational Design @ Carnegie Mellon University</div>
+        <div class="expertise">Architectural Background | Technical Expertise | Creative Problem-Solving</div>
 
-            <div class="button-container">
-                <a href="design-portfolio.html" class="button">
-                    <span class="icon">🎨</span>
-                    Design Portfolio
-                    <div class="description">Digital Fabrication & Design Projects</div>
-                </a>
-
-                <a href="https://github.com/hyChia88" class="button">
-                    <span class="icon">💻</span>
-                    GitHub Portfolio
-                    <div class="description">Software Development Projects</div>
-                </a>
-            </div>
+        <div class="social-links">
+            <a href="cv.pdf" class="social-link" target="_blank">
+                📄 CV
+            </a>
+            <a href="https://linkedin.com/in/huiyen-chia" class="social-link" target="_blank">
+                🔗 LinkedIn
+            </a>
         </div>
 
-        <footer class="footer">
-            <div class="social-links">
-                <a href="cv.pdf" class="social-link" target="_blank">
-                    <span class="icon-small">📄</span>
-                    Curriculum Vitae
-                </a>
-                <a href="https://linkedin.com/in/huiyen-chia" class="social-link" target="_blank">
-                    <span class="icon-small">👥</span>
-                    LinkedIn Profile
-                </a>
-            </footer>
+        <div class="portfolio-links">
+            <a href="design-portfolio.html" class="portfolio-item">
+                <div class="portfolio-title">
+                    🎨 Design Portfolio
+                </div>
+                <div class="portfolio-description">
+                    Digital Fabrication & Design Projects
+                </div>
+            </a>
+
+            <a href="https://github.com/hyChia88" class="portfolio-item">
+                <div class="portfolio-title">
+                    💻 GitHub Portfolio
+                </div>
+                <div class="portfolio-description">
+                    Software Development Projects
+                </div>
+            </a>
         </div>
     </div>
 </body>
