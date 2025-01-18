@@ -27,29 +27,22 @@
         .container {
             max-width: 1000px;
             margin: 0 auto;
+            position: relative;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .back-button {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background: white;
+        .back-link {
+            position: absolute;
+            top: 0;
+            right: 0;
+            font-size: 1.1rem;
             color: var(--primary-color);
             text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 1rem;
+            transition: color 0.3s ease;
         }
 
-        .back-button:hover {
+        .back-link:hover {
             color: var(--hover-color);
-            transform: translateX(-5px);
         }
 
         .pdf-container {
@@ -57,6 +50,7 @@
             padding: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 3rem;
         }
 
         .pdf-viewer {
@@ -73,20 +67,24 @@
             .pdf-viewer {
                 height: 500px;
             }
+
+            .back-link {
+                font-size: 1rem;
+                padding: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="index.html" class="back-link">← back to main</a>
+        
         <div class="pdf-container">
             <iframe 
                 class="pdf-viewer"
                 src="portfolio.pdf"
                 type="application/pdf">
             </iframe>
-        </div>
-        <div class="header">
-            <a href="index.html" class="back-button">← Back to Main</a>
         </div>
     </div>
 </body>
