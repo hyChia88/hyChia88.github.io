@@ -5,152 +5,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chia Hui Yen | Portfolio</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --hover-color: #3498db;
-            --bg-color: #f8f9fa;
-            --text-color: #2c3e50;
-        }
+        /* [Previous root and general styles remain the same] */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
+        .page-wrapper {
             min-height: 100vh;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
+            flex-direction: column;
         }
 
         .container {
             text-align: center;
             max-width: 600px;
             width: 100%;
+            margin: auto;
+            padding: 2rem;
+            flex-grow: 1;
         }
 
-        header {
-            margin-bottom: 4rem;
+        /* [Previous header and button styles remain the same] */
+
+        .footer {
+            width: 100%;
+            padding: 2rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid rgba(44, 62, 80, 0.1);
         }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-        }
-
-        .professional-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin-bottom: 0.5rem;
-        }
-
-        .education {
-            font-size: 1rem;
-            color: #888;
-            font-style: italic;
-        }
-
-        .expertise {
-            font-size: 1rem;
-            color: #888;
-            font-style: italic;
-            margin-bottom: 3rem;
-        }
-
-        .button-container {
+        .social-links {
             display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin: 0 auto;
-            max-width: 400px;
+            justify-content: center;
+            gap: 3rem;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
-        .button {
-            display: block;
-            padding: 1.5rem 2rem;
-            background: white;
+        .social-link {
             color: var(--primary-color);
             text-decoration: none;
-            border-radius: 8px;
+            opacity: 0.8;
             transition: all 0.3s ease;
-            font-weight: 500;
-            font-size: 1.1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 2px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-color: var(--hover-color);
+        .social-link:hover {
+            opacity: 1;
             color: var(--hover-color);
+            transform: translateY(-1px);
         }
 
-        .icon {
-            display: block;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .description {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 0.5rem;
+        .social-link .icon-small {
+            font-size: 1.1rem;
         }
 
         @media (max-width: 480px) {
-            body {
-                padding: 1rem;
+            .footer {
+                padding: 1.5rem 0;
             }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .professional-title {
-                font-size: 1.1rem;
-            }
-
-            .education {
-                font-size: 1rem;
-            }
-
-            .button {
-                padding: 1.2rem 1.5rem;
+            
+            .social-links {
+                gap: 2rem;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Chia Hui Yen</h1>
-            <div class="professional-title">Computational Designer | Software Engineer | Maker</div>
-            <div class="education">M.S. in Computational Design @ Carnegie Mellon University</div>
-            <div class="expertise">Architectural Background | Technical Expertise | Creative Problem-Solving</div>
-        </header>
+    <div class="page-wrapper">
+        <div class="container">
+            <header>
+                <h1>Chia Hui Yen</h1>
+                <div class="professional-title">Computational Designer | Software Engineer | Maker</div>
+                <div class="education">M.S. in Computational Design @ Carnegie Mellon University</div>
+                <div class="expertise">Architectural Background | Technical Expertise | Creative Problem-Solving</div>
+            </header>
 
-        <div class="button-container">
-            <a href="design-portfolio.html" class="button">
-                <span class="icon">🎨</span>
-                Design Portfolio
-                <div class="description">Digital Fabrication & Design Projects</div>
-            </a>
+            <div class="button-container">
+                <a href="design-portfolio.html" class="button">
+                    <span class="icon">🎨</span>
+                    Design Portfolio
+                    <div class="description">Digital Fabrication & Design Projects</div>
+                </a>
 
-            <a href="https://github.com/hyChia88" class="button">
-                <span class="icon">💻</span>
-                GitHub Portfolio
-                <div class="description">Software Development Projects</div>
-            </a>
+                <a href="https://github.com/hyChia88" class="button">
+                    <span class="icon">💻</span>
+                    GitHub Portfolio
+                    <div class="description">Software Development Projects</div>
+                </a>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="social-links">
+                <a href="cv.pdf" class="social-link" target="_blank">
+                    <span class="icon-small">📄</span>
+                    Curriculum Vitae
+                </a>
+                <a href="https://linkedin.com/in/huiyen-chia" class="social-link" target="_blank">
+                    <span class="icon-small">👥</span>
+                    LinkedIn Profile
+                </a>
+            </footer>
         </div>
     </div>
 </body>
