@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Projects | Chia Hui Yen</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="nav-container">
+            <a href="index.html" class="back-link">← Back to Main</a>
+        </nav>
+
+        <header class="header">
+            <h1>CS Projects</h1>
+            <p>A collection of software development and technical projects</p>
+        </header>
+
+        <main class="grid" id="projectGrid">
+            <!-- Project 1 -->
+            <article class="project">
+                <div class="project-inner">
+                    <div class="project-image">
+                        <img src="assets/images/projects/project1.jpg" alt="AI Image Generator" 
+                             data-static="assets/images/projects/project1.jpg" 
+                             data-gif="assets/images/projects/project1.gif">
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">AI Image Generator</h3>
+                        <p class="project-description">Deep learning model for image generation using stable diffusion</p>
+                    </div>
+                    <div class="project-overlay">
+                        <a href="https://github.com/your-username/project1" class="project-link" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        </a>
+                        <a href="https://your-demo-link.com" class="project-link" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Copy and modify the article element for each project -->
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('projectGrid');
+            const projects = document.querySelectorAll('.project');
+
+            // Mouse move effect
+            document.addEventListener('mousemove', (e) => {
+                const { clientX, clientY } = e;
+                projects.forEach(project => {
+                    const rect = project.getBoundingClientRect();
+                    const projectCenterX = rect.left + rect.width / 2;
+                    const projectCenterY = rect.top + rect.height / 2;
+
+                    const deltaX = clientX - projectCenterX;
+                    const deltaY = clientY - projectCenterY;
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    const maxDistance = 300;
+
+                    if (distance < maxDistance) {
+                        const scale = 1 + ((maxDistance - distance) / maxDistance) * 0.05;
+                        project.style.transform = `scale(${scale})`;
+                    } else {
+                        project.style.transform = 'scale(1)';
+                    }
+                });
+            });
+
+            // Image swap on hover
+            projects.forEach(project => {
+                const img = project.querySelector('img');
+                const staticSrc = img.dataset.static;
+                const gifSrc = img.dataset.gif;
+
+                project.addEventListener('mouseenter', () => {
+                    img.src = gifSrc;
+                });
+
+                project.addEventListener('mouseleave', () => {
+                    img.src = staticSrc;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
