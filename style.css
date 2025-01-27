@@ -277,97 +277,6 @@ body {
     color: var(--text-color);
 }
 
-/* Courses Section */
-.courses-section {
-    margin-top: 5rem;
-    margin: 3rem auto;
-}
-
-.course-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.course-item {
-    background: white;
-}
-
-.course-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: var(--transition-base);
-    font-size: 0.9rem;
-}
-
-.course-header:hover {
-    background: var(--gray-light);
-}
-
-.course-name {
-    font-weight: 300;
-}
-
-.course-toggle {
-    width: 24px;
-    height: 24px;
-    position: relative;
-    transition: transform 0.3s ease;
-}
-
-.course-toggle::before,
-.course-toggle::after {
-    content: '';
-    position: absolute;
-    background: var(--text-color);
-    border-radius: 2px;
-    transition: var(--transition-base);
-}
-
-.course-toggle::before {
-    width: 2px;
-    height: 12px;
-    left: 11px;
-    top: 6px;
-}
-
-.course-toggle::after {
-    width: 12px;
-    height: 2px;
-    left: 6px;
-    top: 11px;
-}
-
-.course-item.active .course-toggle::before {
-    transform: rotate(90deg);
-    opacity: 0;
-}
-
-.course-description {
-    max-height: 0;
-    overflow: hidden;
-    transition: var(--transition-base);
-}
-
-.course-item.active .course-description {
-    max-height: 500px;
-}
-
-.course-content {
-    padding: 0 1.5rem 1.5rem;
-    color: var(--gray-medium);
-}
-
-.course-content ul {
-    margin-top: 0.75rem;
-    padding-left: 1.25rem;
-}
-
-.course-content li {
-    margin-bottom: 0.5rem;
-}
 
 /* PDF Viewer */
 .pdf-container {
@@ -468,6 +377,10 @@ body {
 }
 
 /*Course description related*/
+.course-section{
+    margin: 2rem;
+}
+
 .course-list {
     margin: 1rem auto;
 }
@@ -491,8 +404,8 @@ body {
 }
 
 .course-name {
-    font-size: 1.25rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 300;
     color: var(--text-color);
 }
 
@@ -545,5 +458,5 @@ body {
 
 .course-content {
     color: var(--gray-medium);
-    line-height: 1.6;
+    line-height: 1;
 }
