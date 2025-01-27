@@ -374,8 +374,7 @@ body {
 /* PDF Viewer */
 .pdf-container {
     background: white;
-    padding: 2rem;
-    border-radius: 12px;
+    padding: 0rem;
     box-shadow: var(--shadow-sm);
     margin-top: 2rem;
 }
