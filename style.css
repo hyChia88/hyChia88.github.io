@@ -10,6 +10,7 @@
     --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
     --transition-base: all 0.3s ease;
+    --scale-factor:90%
 }
 
 /* Reset and Base Styles */
@@ -23,17 +24,17 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--bg-color);
     min-height: 100vh;
-    padding: 2rem;
+    padding: 1.9rem;
     color: var(--text-color);
     line-height: 1.6;
+    font-size: 95%; 
 }
 
 /* Layout */
 .container {
-    max-width: 1200px;
+    max-width: 1026px;  /* Reduced from 1080px */
     margin: 0 auto;
-    padding: 2rem;
-    position: relative;
+    padding: 1.9rem;  /* Reduced from 2rem */
 }
 
 /* Navigation */
@@ -66,10 +67,10 @@ body {
 }
 
 .header h1 {
-    font-size: 2.5rem;
+    font-size: 1.9rem;
     font-weight: 300;
-    margin-bottom: 1rem;
     color: var(--text-color);
+    margin: 1rem
 }
 
 .header p {
@@ -80,20 +81,16 @@ body {
 
 /* Main Content */
 .professional-title {
-    font-size: 1.2rem;
+    margin: 0.5rem;
+    font-size: 1.1rem;
     font-weight: 500;
-    margin-bottom: 0.75rem;
     color: var(--text-color);
 }
 
-.education, .expertise {
-    font-size: 1rem;
+.subtile {
+    margin: 0.5rem;
+    font-size: 0.9rem;
     color: var(--gray-medium);
-    margin-bottom: 0.75rem;
-}
-
-.expertise {
-    margin-bottom: 2.5rem;
 }
 
 /* Links */
@@ -101,15 +98,15 @@ body {
     display: flex;
     justify-content: center;
     gap: 2rem;
-    margin-bottom: 3rem;
+    margin: 1.5rem;
     flex-wrap: wrap;
 }
 
 .social-link {
     color: var(--text-color);
     text-decoration: none;
-    font-size: 1rem;
-    padding: 0.75rem 1.25rem;
+    font-size: 0.8rem;
+    padding: 0.75rem;
     border-radius: 6px;
     transition: var(--transition-base);
     display: flex;
@@ -149,7 +146,7 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-.portfolio-title, .subpage-title {
+.subpage-title {
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -159,8 +156,8 @@ body {
     gap: 0.5rem;
 }
 
-.portfolio-description, .subpage-description {
-    font-size: 1.1rem;
+.subpage-description {
+    font-size: 0.8rem;
     color: var(--gray-medium);
     text-align: center;
 }
@@ -168,7 +165,7 @@ body {
 /* Section Headers */
 .section-header {
     text-align: left;
-    margin: 4rem 0 2rem;
+    margin: 2.5rem 0 2rem;
     border-bottom: 2px solid var(--border-color);
     padding-bottom: 1rem;
 }
@@ -228,14 +225,14 @@ body {
 }
 
 .project-title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 500;
     margin-bottom: 0.3rem;
     color: var(--text-color);
 }
 
 .project-description {
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     color: var(--gray-medium);
     line-height: 1.5;
 }
@@ -302,6 +299,7 @@ body {
     align-items: center;
     cursor: pointer;
     transition: var(--transition-base);
+    font-size: 0.9rem;
 }
 
 .course-header:hover {
@@ -309,8 +307,7 @@ body {
 }
 
 .course-name {
-    font-size: 1.125rem;
-    font-weight: 500;
+    font-weight: 300;
 }
 
 .course-toggle {
@@ -382,7 +379,7 @@ body {
 
 .pdf-viewer {
     width: 100%;
-    height: 800px;
+    height: 1000px;
     border: none;
 }
 
@@ -415,12 +412,12 @@ body {
         height: 500px;
     }
     
-    .portfolio-title, .subpage-title {
-        font-size: 1.25rem;
+    .subpage-title {
+        font-size: 1rem;
     }
 
-    .portfolio-description, .subpage-description {
-        font-size: 1rem;
+    .subpage-description {
+        font-size: 0.8rem;
     }
 
     .project-content {
@@ -428,7 +425,7 @@ body {
     }
 
     .project-title {
-        font-size: 1.25rem;
+        font-size: 1rem;
     }
 
     .section-header h2 {
@@ -450,7 +447,7 @@ body {
         display: flex;
         justify-content: center;
         gap: 2rem;
-        margin-bottom: 3rem;
+        margin-bottom: 2rem;
     }
 
     .social-link {
