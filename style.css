@@ -240,9 +240,8 @@ body {
 .project-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0);
     display: flex;
-    align-items: center;
+    align-items: center;;
     justify-content: center;
     gap: 1.25rem;
     opacity: 0;
@@ -251,7 +250,6 @@ body {
 }
 
 .project:hover .project-overlay {
-    background: rgba(0, 0, 0, 0.6);
     opacity: 1;
 }
 
@@ -260,15 +258,16 @@ body {
     height: 44px;
     background: white;
     border-radius: 50%;
+    border: 1px solid #001122;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: var(--transition-base);
+    transform: translateY(65px) translateX(185px); 
 }
 
 .project-link:hover {
     background: var(--gray-light);
-    transform: translateY(-2px);
 }
 
 .project-link svg {
