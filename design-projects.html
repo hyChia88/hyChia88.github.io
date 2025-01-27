@@ -3,29 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design Portfolio | Chia Hui Yen</title>
+    <title>Design Projects | Chia Hui Yen</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 2rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 1200px;
+            height: 90vh;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: var(--transition-base);
+            z-index: 1001;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-light);
+            transform: scale(1.1);
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <nav class="nav-container">
             <a href="index.html" class="back-link">← Back to Main</a>
         </nav>
-        
+
         <header class="header">
             <h1>Design Portfolio</h1>
-            <p>A showcase of digital fabrication and design projects</p>
+            <p>A collection of architectural and computational design works</p>
         </header>
-        
-        <main class="pdf-container">
-            <iframe
-                class="pdf-viewer"
-                src="portfolio.pdf"
-                type="application/pdf"
-                title="Design Portfolio PDF">
-                <p>Your browser doesn't support PDF viewing. Please <a href="portfolio.pdf">download the PDF</a> to view it.</p>
-            </iframe>
-        </main>
+
+        <section class="projects-section">
+            <div class="grid" id="projectGrid">
+                <!-- Project 1 -->
+                <article class="project">
+                    <div class="project-inner">
+                        <div class="project-image">
+                            <img src="assets/img/networks.jpg"
+                                    data-static="assets/img/networks.jpg"
+                                    data-gif="assets/img/networks.jpg"
+                                    alt="Networks">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Networks: Design Optimization</h3>
+                            <p class="project-description">Light-weight structure design, Interactive light & art installation, Design Optimization, Parametric design</p>
+                        </div>
+                        <div class="project-overlay">
+                            <button
+                                class="project-link"
+                                onclick="openPdfViewer('assets/pdfs/Networks.pdf')"
+                                aria-label="View Project Details">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 2 -->
+                <article class="project">
+                    <div class="project-inner">
+                        <div class="project-image">
+                            <img src="assets/img/Building performance.jpg"
+                                    data-static="assets/img/Building performance.jpg"
+                                    data-gif="assets/img/Building performance.jpg"
+                                    alt="Building performance">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">The Forest Community Center Environment Optimization</h3>
+                            <p class="project-description">_Building performance optimization, Climate adpative design, Parametric design</p>
+                        </div>
+                        <div class="project-overlay">
+                            <button
+                                class="project-link"
+                                onclick="openPdfViewer('assets/pdfs/Building Performance.pdf')"
+                                aria-label="View Project Details">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 3 -->
+                <article class="project">
+                    <div class="project-inner">
+                        <div class="project-image">
+                            <img src="assets/img/droplet.jpg"
+                                    data-static="assets/img/droplet.jpg"
+                                    data-gif="assets/img/droplet.jpg"
+                                    alt="Sense Bridge Project">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Digital Fabrication: Droplet</h3>
+                            <p class="project-description">_Digital Fabrication, Structure design,  Artificial fog system design</p>
+                        </div>
+                        <div class="project-overlay">
+                            <button
+                                class="project-link"
+                                onclick="openPdfViewer('assets/pdfs/Droplet.pdf')"
+                                aria-label="View Project Details">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Project 4 -->
+                <article class="project">
+                    <div class="project-inner">
+                        <div class="project-image">
+                            <img src="assets/img/3d printing.jpg"
+                                    data-static="assets/img/3d printing.jpg"
+                                    data-gif="assets/img/3d printing.jpg"
+                                    alt="3D printing Project">
+                        </div>
+                        <div class="project-content">
+                            <h3 class="project-title">Details & Joinery: 3D Printing Traditional Joints</h3>
+                            <p class="project-description">_Digital fabrication, Typology Research, 3D printing, Parametric design</p>
+                        </div>
+                        <div class="project-overlay">
+                            <button
+                                class="project-link"
+                                onclick="openPdfViewer('assets/pdfs/3d printing.pdf')"
+                                aria-label="View Project Details">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- PDF Modal -->
+        <div class="modal-overlay" id="pdfModal">
+            <button class="modal-close" onclick="closePdfViewer()" aria-label="Close PDF viewer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="modal-content">
+                <iframe id="pdfViewer" class="pdf-viewer"></iframe>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const projects = document.querySelectorAll('.project');
+
+            // Mouse move effect
+            document.addEventListener('mousemove', (e) => {
+                const { clientX, clientY } = e;
+                projects.forEach(project => {
+                    const rect = project.getBoundingClientRect();
+                    const projectCenterX = rect.left + rect.width / 2;
+                    const projectCenterY = rect.top + rect.height / 2;
+
+                    const deltaX = clientX - projectCenterX;
+                    const deltaY = clientY - projectCenterY;
+                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                    const maxDistance = 300;
+
+                    if (distance < maxDistance) {
+                        const scale = 1 + ((maxDistance - distance) / maxDistance) * 0.05;
+                        project.style.transform = `scale(${scale})`;
+                    } else {
+                        project.style.transform = 'scale(1)';
+                    }
+                });
+            });
+
+            // Image swap on hover
+            projects.forEach(project => {
+                const img = project.querySelector('img');
+                const staticSrc = img.dataset.static;
+                const gifSrc = img.dataset.gif;
+
+                project.addEventListener('mouseenter', () => {
+                    img.src = gifSrc;
+                });
+
+                project.addEventListener('mouseleave', () => {
+                    img.src = staticSrc;
+                });
+            });
+        });
+
+        // PDF Viewer Functions
+        function openPdfViewer(pdfUrl) {
+            const modal = document.getElementById('pdfModal');
+            const viewer = document.getElementById('pdfViewer');
+            viewer.src = pdfUrl;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closePdfViewer() {
+            const modal = document.getElementById('pdfModal');
+            const viewer = document.getElementById('pdfViewer');
+            modal.classList.remove('active');
+            viewer.src = '';
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('pdfModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('pdfModal')) {
+                closePdfViewer();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePdfViewer();
+            }
+        });
+    </script>
 </body>
 </html>
