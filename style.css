@@ -63,11 +63,18 @@ body {
 /* Header */
 .header {
     text-align: center;
-    margin-bottom: 3rem;
+    margin: 3rem;
 }
 
 .header h1 {
-    font-size: 1.9rem;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--text-color);
+    margin: 1rem
+}
+
+.header h2 {
+    font-size: 2rem;
     font-weight: 300;
     color: var(--text-color);
     margin: 1rem
@@ -81,15 +88,16 @@ body {
 
 /* Main Content */
 .professional-title {
-    margin: 0.5rem;
+    margin: 0.1rem;
     font-size: 1.1rem;
     font-weight: 500;
     color: var(--text-color);
 }
 
 .subtile {
-    margin: 0.5rem;
+    margin: 0.1rem;
     font-size: 0.9rem;
+    font-style: italic;
     color: var(--gray-medium);
 }
 
@@ -97,8 +105,8 @@ body {
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 2rem;
-    margin: 1.5rem;
+    gap: 1rem;
+    margin: 1rem;
     flex-wrap: wrap;
 }
 
@@ -165,9 +173,9 @@ body {
 /* Section Headers */
 .section-header {
     text-align: left;
-    margin: 2.5rem 0 2rem;
+    margin: 1rem;
     border-bottom: 2px solid var(--border-color);
-    padding-bottom: 1rem;
+    padding-top: 3rem;
 }
 
 .section-header h2 {
@@ -232,9 +240,9 @@ body {
 }
 
 .project-description {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: var(--gray-medium);
-    line-height: 1.5;
+    line-height: 1.2;
 }
 
 .project-overlay {
