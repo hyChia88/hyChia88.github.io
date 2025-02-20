@@ -1,186 +1,120 @@
-class PhysicsButton {
-    constructor(config) {
-        this.config = config;
-        this.element = document.createElement('div');
-        this.element.className = `button button-${config.id}`;
-        this.element.style.width = `${config.size}px`;
-        this.element.style.height = `${config.size}px`;
-        
-        // Physics properties
-        this.x = 100 + (config.finalPosition * 400); // Convert percentage to pixels
-        this.y = config.initialDropHeight;
-        this.velocity = { x: 0, y: 0 };
-        this.rotation = 0;
-        this.isDropping = true;
-        this.hasLanded = false;
+document.addEventListener('DOMContentLoaded', () => {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
 
-        // Add click handler
-        this.element.addEventListener('click', () => {
-            window.open(config.link, '_blank');
+    // Intersection Observer for section animations
+    const sections = document.querySelectorAll('.section');
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
+    const sectionObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target); // Only animate once
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => {
+        sectionObserver.observe(section);
+    });
+
+    // Project hover effects
+    const projects = document.querySelectorAll('.featured-project');
+    
+    projects.forEach(project => {
+        project.addEventListener('mouseenter', () => {
+            project.style.transform = 'translateY(-8px)';
         });
 
-        // Initial position
-        this.updatePosition();
-    }
+        project.addEventListener('mouseleave', () => {
+            project.style.transform = 'translateY(0)';
+        });
+    });
 
-    updatePosition() {
-        this.element.style.transform = `
-            translate(${this.x}px, ${this.y}px)
-            rotate(${this.rotation}deg)
-        `;
-    }
-
-    update(angle, deltaTime) {
-        const radians = (angle * Math.PI) / 180;
-        const gravity = 9.81;
-        const friction = 0.98; // Change here for diff button
-        const elasticity = 0.7;
+    // Navbar scroll behavior
+    let lastScrollTop = 0;
+    const quickNav = document.querySelector('.quick-nav');
+    
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         
-        if (this.isOnSeesaw) {
-            // Calculate acceleration based on slope angle
-            const acceleration = Math.sin(radians) * gravity;
-            
-            // Update velocities
-            this.velocity.x += acceleration * deltaTime * Math.cos(radians);
-            this.velocity.y += acceleration * deltaTime * Math.sin(radians);
-            
-            // Apply friction
-            this.velocity.x *= friction;
-            this.velocity.y *= friction;
-            
-            // Update position
-            this.x += this.velocity.x;
-            this.y += this.velocity.y;
-            
-            // Update rotation (based on movement)
-            const rotationSpeed = (this.velocity.x * 1);
-            this.rotation += rotationSpeed;
+        // Add shadow and background to nav when scrolling
+        if (scrollTop > 50) {
+            quickNav.style.background = 'rgba(255, 255, 255, 0.9)';
+            quickNav.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
+        } else {
+            quickNav.style.background = 'transparent';
+            quickNav.style.boxShadow = 'none';
+        }
+        
+        lastScrollTop = scrollTop;
+    });
 
-            // Constrain to seesaw bounds
-            const seesawWidth = 600;
-            const buttonWidth = 40;
-            const minX = 100;
-            const maxX = seesawWidth - buttonWidth + 100;
+    // Active section highlighting in navigation
+    const navLinks = document.querySelectorAll('.quick-nav a');
+    const sections = document.querySelectorAll('section[id]');
 
-            if (this.x < minX) {
-                this.x = minX;
-                this.velocity.x *= -elasticity;
+    window.addEventListener('scroll', () => {
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= sectionTop - 60) {
+                current = section.getAttribute('id');
             }
-            if (this.x > maxX) {
-                this.x = maxX;
-                this.velocity.x *= -elasticity;
-            }
+        });
 
-            // Calculate Y position based on seesaw angle
-            const distanceFromCenter = this.x - (seesawWidth / 2 + 100);
-            const heightOffset = Math.sin(radians) * distanceFromCenter;
-            
-            // Update element position and rotation
-            this.element.style.transform = `
-                translate(${this.x}px, ${177 + heightOffset}px)
-                rotate(${this.rotation}deg)
-            `;
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').slice(1) === current) {
+                link.classList.add('active');
+            }
+        });
+    });
+
+    // Image lazy loading
+    const images = document.querySelectorAll('img[data-src]');
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                observer.unobserve(img);
+            }
+        });
+    });
+
+    images.forEach(img => imageObserver.observe(img));
+});
+
+// Helper function to throttle scroll events
+function throttle(func, limit) {
+    let inThrottle;
+    return function() {
+        const args = arguments;
+        const context = this;
+        if (!inThrottle) {
+            func.apply(context, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
         }
     }
 }
-
-// Button configuration object
-const buttonConfigs = [
-    {
-        id: 1,
-        size: 60,                    // size in pixels
-        finalPosition: 0.1,          // 10% from left
-        link: openPdfViewer('assets/pdfs/Networks.pdf'),
-        image: 'assets/img/networks.jpg', // replace with actual image path
-        initialDropHeight: -200      // starting height above seesaw
-    },
-    {
-        id: 2,
-        size: 45,
-        finalPosition: 0.25,         // 25% from left
-        link: openPdfViewer('assets/pdfs/Networks.pdf'),
-        image: 'assets/img/networks.jpg', // replace with actual image path
-        initialDropHeight: -200      // starting height above seesaw
-    },
-    {
-        id: 3,
-        size: 70,
-        finalPosition: 0.9,          // 90% from left
-        link: openPdfViewer('assets/pdfs/Networks.pdf'),
-        image: 'assets/img/networks.jpg', // replace with actual image path
-        initialDropHeight: -200      // starting height above seesaw
-    },
-    {
-        id: 4,
-        size: 50,
-        finalPosition: 0.6,          // 60% from left
-        link: openPdfViewer('assets/pdfs/Networks.pdf'),
-        image: 'assets/img/networks.jpg', // replace with actual image path
-        initialDropHeight: -200      // starting height above seesaw
-    },
-    {
-        id: 5,
-        size: 55,
-        finalPosition: 1.0,          // 100% from left
-        link: openPdfViewer('assets/pdfs/Networks.pdf'),
-        image: 'assets/img/networks.jpg', // replace with actual image path
-        initialDropHeight: -200      // starting height above seesaw
-    },
-];
-
-
-const seesaw = document.getElementById('seesaw');
-const container = document.getElementById('seesaw-container');
-const leftArea = document.getElementById('left-area');
-const rightArea = document.getElementById('right-area');
-
-// Create buttons with physics
-const buttonPositions = [150, 250, 350, 450, 550];
-const physicsButtons = [];
-
-buttonPositions.forEach((position) => {
-    const button = document.createElement('div');
-    button.className = 'button';
-    container.appendChild(button);
-    
-    const physicsButton = new PhysicsButton(button, position);
-    physicsButtons.push(physicsButton);
-});
-
-let currentAngle = 0;
-let lastTime = performance.now();
-let isAnimating = true;
-
-function animate(currentTime) {
-    const deltaTime = (currentTime - lastTime) / 1000;
-    lastTime = currentTime;
-
-    physicsButtons.forEach(button => {
-        button.update(currentAngle, deltaTime);
-    });
-
-    if (isAnimating) {
-        requestAnimationFrame(animate);
-    }
-}
-
-function tiltSeesaw(angle) {
-    currentAngle = angle;
-    seesaw.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-}
-
-// Event listeners
-leftArea.addEventListener('mouseenter', () => tiltSeesaw(-5));
-rightArea.addEventListener('mouseenter', () => tiltSeesaw(5));
-container.addEventListener('mouseleave', () => tiltSeesaw(0));
-
-// Make buttons interactive
-physicsButtons.forEach(physicsButton => {
-    physicsButton.element.addEventListener('click', () => {
-        physicsButton.element.style.backgroundColor = 
-            `hsl(${Math.random() * 360}, 70%, 60%)`;
-    });
-});
-
-// Start animation loop
-requestAnimationFrame(animate);
