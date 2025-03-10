@@ -239,9 +239,9 @@ h2 {
 /* Side description card */
 .project-content {
     position: absolute;
-    top: -50%;
-    left: calc(15%);
-    transform: scale(0.33);
+    top: -30%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.33);
     transform-origin: center;
     background-color: white;
     padding: 15px;
@@ -252,14 +252,6 @@ h2 {
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     z-index: 200;
-}
-
-/* Adjust position for right-side projects to show description on left */
-.project:nth-child(n+5) .project-content {
-    left: auto;
-    right: calc(115%);
-    top: -30px;
-    transform-origin: right center;
 }
 
 .project:hover .project-content {
