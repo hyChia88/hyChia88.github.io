@@ -132,6 +132,15 @@ h2 {
     transition: stroke-dashoffset 0.8s ease 0.3s; /* Delay bracket animation */
 }
 
+.project-link:hover + .project-highlight,
+.project-link:hover ~ .project-highlight-description {
+    opacity: 1;
+}
+
+.project-link:hover ~ .project-highlight-description {
+    opacity: 1;
+}
+
 /* Animation triggers on hover */
 .summary a[href="https://github.com/hyChia88/Weaving-Structure-Installation-Optimization-and-Automation.git"]:hover + .project-highlight {
     opacity: 1;
