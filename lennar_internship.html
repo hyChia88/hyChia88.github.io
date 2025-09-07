@@ -6,8 +6,10 @@
     <title>Internship work at Lennar</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .notes-container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-        h2 { margin-bottom: 1em; }
+        .notes-container { max-width: 80%; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+        h2 { font-size: 200%; margin-bottom: 0.5em; }
+        h3 { font-size: 150%; margin-top: 1em; margin-bottom: 0.5em; }
+        p { margin-bottom: 0.5em; }
         ul { margin-bottom: 1em; }
         textarea { width: 100%; min-height: 80px; border-radius: 4px; border: 1px solid #ccc; padding: 0.5em; margin-bottom: 1em; }
         button { background: #2d6cdf; color: #fff; border: none; border-radius: 4px; padding: 0.5em 1.5em; cursor: pointer; }
@@ -17,18 +19,79 @@
 <body>
     <div class="notes-container">
         <h2>Internship work at Lennar</h2>
-        <ul>
-            Architected scalable FastAPI microservices with object-oriented design supporting multimodal AI workflows, processing 1000+ images with hybrid search (semantic + keyword + reranking) in 240 seconds through async batch processing and efficient API orchestration.
+        <p>
+            This is the documentation of my work at Lennar Corporation. Leveraging LLM to interpret data to manage construction process.
+        </p>
+        <ul style="padding-left:2em;">
+            <li><strong>Technology Stack:</strong> Python, FastAPI, OpenAI APIs, FAISS, LangChain</li>
+            <li><strong>Timeline:</strong> June 2025 - August 2025</li>
+            <li><strong>Role:</strong> Applied AI Engineer Intern</li>
+            <li>
+                <strong>Job description:</strong>
+                <ul style="padding-left:2em;">
+                    <li>Architected scalable FastAPI microservices with object-oriented design supporting multimodal AI workflows, processing 1000+ images with hybrid search (semantic + keyword + reranking) in 240 seconds through async batch processing and efficient API orchestration.</li>
+                    <li>Built high-performance vector database infrastructure using FAISS with O(1) metadata lookup and hybrid retrieval strategies, enabling real-time semantic search across construction domain knowledge with sub-second query response times.</li>
+                    <li>Engineered end-to-end NLP pipeline processing construction conversations into structured data reports using few-shots classification, K-means/HDBSCAN clustering, and RAG framework with LangChain integration, achieving 20k+ text embeddings in under 300 seconds.</li>
+                    <li>Optimized ML system performance through asyncio implementation and concurrent OpenAI's API calls, delivering measurable precision/recall improvements on production-scale noisy text data while maintaining system reliability.</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Project problem statement:</strong>
+                <ul style="padding-left:2em;">
+                    <li>Automated quality control extraction from construction communications: Identify QC issue, extract issue, enrich with details, output BuildPro issue</li>
+                    <li>Image parse: keywords labeling for each site image</li>
+                    <li>Document Image Parse: Extract structured data for each document image</li>
+                    <li>ImageSearch that can be searched by Natural Language</li>
+                </ul>
+            </li>
         </ul>
-        <ul>
-            Built high-performance vector database infrastructure using FAISS with O(1) metadata lookup and hybrid retrieval strategies, enabling real-time semantic search across construction domain knowledge with sub-second query response times.
-        </ul>
-        <ul>
-            Engineered end-to-end NLP pipeline processing construction conversations into structured data reports using few-shots classification, K-means/HDBSCAN clustering, and RAG framework with LangChain integration, achieving 20k+ text embeddings in under 300 seconds.
-        </ul>
-        <ul>
-            Optimized ML system performance through asyncio implementation and concurrent OpenAI's API calls, delivering measurable precision/recall improvements on production-scale noisy text data while maintaining system reliability.
-        </ul>
+        
+    </br>
+        <h3>Project 1: Image search</h3>
+        <ol style="padding-left:2em;">
+            <li>
+                <strong>Overview &amp; Data flow:</strong>
+                <ul style="padding-left:2em;">
+                    <li>Input: Image parse &amp; User query Input</li>
+                    <li>Output: Top k related image</li>
+                </ul>
+            </li>
+            <li style="padding-left:2em;">
+                <strong>Key features:</strong>
+                <ul>
+                    <li>Image Parser: Extracts visual features and metadata from images</li>
+                    <li>Document Image Parser: Analyzes construction documents, QC reports, and forms</li>
+                    <li>Image Search Engine: Enables natural language queries to find relevant images</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Architecture:</strong>
+                <img src="assets/img/lennar-imagesearch.png" alt="lennar-image search" style="max-width:100%;margin:1em 0;">
+            </li>
+            <li>
+                <strong>Demo with synthetic data:</strong>
+                <img src="assets/img/lennar-demo.png" alt="lennar-demo" style="max-width:100%;margin:1em 0;">
+            </li>
+        </ol>
+    </br>
+        <h3>Project 2: Issue detect and extract</h3>
+        <ol style="padding-left:2em;">
+            <li>
+                <strong>System Architecture:</strong>
+                <ul style="padding-left:2em;">
+                    <li>Input: Single target message, supported by previous messages &amp; external data from BuiltPro</li>
+                    <li>Output: Issue extracted &amp; Evaluation report</li>
+                    <li>Key Features: Data preprocessing, Classification &amp; Clustering, Extraction, Enrichment</li>
+                </ul>
+                <img src="assets/img/lennar-issueextract.png" alt="lennar-architecture" style="max-width:100%;margin:1em 0;">
+            </li>
+            <li>
+                <strong>Sample output with synthetic data:</strong></br>
+                <div style="text-align:center;">
+                    <img src="assets/img/lennar-sampleoutput.png" alt="lennar-sampleoutput" style="max-width:60%;margin:1em 0;">
+                </div>
+            </li>
+        </ol>
     </div>
 </body>
 </html>
