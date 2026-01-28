@@ -7,10 +7,15 @@
     <link rel="stylesheet" href="style.css">
     <style>
         .notes-container { max-width: 80%; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-        h2 { font-size: 200%; margin-bottom: 0.5em; }
-        h3 { font-size: 150%; margin-top: 1em; margin-bottom: 0.5em; }
-        p { margin-bottom: 0.5em; }
-        ul { margin-bottom: 1em; }
+        h2 { font-size: 180%; margin-top: 1.5em; margin-bottom: 0.5em; }
+        h3 { font-size: 140%; margin-top: 1.2em; margin-bottom: 0.5em; }
+        p { margin-bottom: 0.8em; line-height: 1.6; }
+        ul, ol { margin-bottom: 1em; line-height: 1.8; }
+        li { margin-bottom: 0.5em; }
+        strong { font-weight: 600; }
+        .section-divider { border-top: 1px solid #ddd; margin: 2em 0; }
+        img { max-width: 100%; height: auto; margin: 1.5em 0; border-radius: 8px; }
+        .demo-image { max-width: 90%; margin: 1.5em auto; display: block; }
         textarea { width: 100%; min-height: 80px; border-radius: 4px; border: 1px solid #ccc; padding: 0.5em; margin-bottom: 1em; }
         button { background: #2d6cdf; color: #fff; border: none; border-radius: 4px; padding: 0.5em 1.5em; cursor: pointer; }
         button:hover { background: #1a4fa0; }
@@ -46,8 +51,25 @@
             </li>
         </ul>
         
+    <br>
+        <h3>Project 1: Issue detect and extract</h3>
+        <ol style="padding-left:2em;">
+            <li>
+                <strong>System Architecture:</strong>
+                <ul style="padding-left:2em;">
+                    <li>Input: Single target message, supported by previous messages &amp; external data from existing database</li>
+                    <li>Output: Issue extracted &amp; Evaluation report</li>
+                    <li>Key Features: Data preprocessing, Classification &amp; Clustering, Extraction, Enrichment</li>
+                </ul>
+              </li>
+            <li>
+                <strong>Sample output:</strong>
+                <img src="assets/img/lennar-sampleoutput.png" alt="lennar-sampleoutput" class="demo-image" style="max-width:60%;">
+            </li>
+        </ol>
+
     </br>
-        <h3>Project 1: Image search</h3>
+        <h3>Project 2: Image search</h3>
         <ol style="padding-left:2em;">
             <li>
                 <strong>Overview &amp; Data flow:</strong>
@@ -56,9 +78,9 @@
                     <li>Output: Top k related image</li>
                 </ul>
             </li>
-            <li style="padding-left:2em;">
+            <li>
                 <strong>Key features:</strong>
-                <ul>
+                <ul style="padding-left:2em;">
                     <li>Image Parser: Extracts visual features and metadata from images</li>
                     <li>Document Image Parser: Analyzes construction documents, QC reports, and forms</li>
                     <li>Image Search Engine: Enables natural language queries to find relevant images</li>
@@ -70,23 +92,5 @@
             </li>
         </ol>
     </br>
-        <h3>Project 2: Issue detect and extract</h3>
-        <ol style="padding-left:2em;">
-            <li>
-                <strong>System Architecture:</strong>
-                <ul style="padding-left:2em;">
-                    <li>Input: Single target message, supported by previous messages &amp; external data from existing database</li>
-                    <li>Output: Issue extracted &amp; Evaluation report</li>
-                    <li>Key Features: Data preprocessing, Classification &amp; Clustering, Extraction, Enrichment</li>
-                </ul>
-              </li>
-            <li>
-                <strong>Sample output with synthetic data:</strong></br>
-                <div style="text-align:center;">
-                    <img src="assets/img/lennar-sampleoutput.png" alt="lennar-sampleoutput" style="max-width:60%;margin:1em 0;">
-                </div>
             </li>
-        </ol>
-    </div>
-</body>
-</html>
+        </ol
