@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI for AEC - AI Interpreter</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .notes-container { max-width: 80%; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; }
+        h1 { font-size: 220%; margin-bottom: 0.3em; }
+        .subtitle { font-size: 130%; color: #666; font-style: italic; margin-bottom: 1.5em; }
+        h2 { font-size: 180%; margin-top: 1.5em; margin-bottom: 0.5em; }
+        h3 { font-size: 140%; margin-top: 1.2em; margin-bottom: 0.5em; }
+        p { margin-bottom: 0.8em; line-height: 1.6; }
+        ul, ol { margin-bottom: 1em; line-height: 1.8; }
+        li { margin-bottom: 0.5em; }
+        strong { font-weight: 600; }
+        .section-divider { border-top: 1px solid #ddd; margin: 2em 0; }
+        img { max-width: 100%; height: auto; margin: 1.5em 0; border-radius: 8px; }
+        .demo-image { max-width: 90%; margin: 1.5em auto; display: block; }
+    </style>
+</head>
+<body>
+    <div class="notes-container">
+        <h1>🔄️ AEC AI Interpreter [In-progress]</h1>
+        <p class="subtitle">Bridging the "Semantic Gap" between Messy Site Data and Structured Data</p>
+        
+        <div class="section-divider"></div>
+
+        <h2>1. Motivation & Opportunity</h2>
+        <p>
+            Current AI research in Architecture, Engineering, and Construction (AEC) predominantly clusters into three trajectories:
+        </p>
+        <ol style="padding-left:2em;">
+            <li><strong>Streamlining Heterogeneous Data:</strong> Aligning disparate formats (drawings, schedules, site records) via multimodal training.</li>
+            <li><strong>Conditional Generation:</strong> Generating 3D geometry or BIM models directly from prompts or sketches.</li>
+            <li><strong>Context Understanding:</strong> Leveraging LLMs as conversational agents to retrieve information.</li>
+        </ol>
+        <p>
+            <strong>The Gap:</strong> While these technologies generate <em>new</em> data efficiently, they struggle to interpret the <em>messy, unstructured evidence</em> found in ongoing construction projects.
+        </p>
+        <p>
+            <strong>The Question:</strong> How can we use AI not just to generate models, but to reliably align unstructured site evidence (photos, chat logs) with strict regulatory schemas (IFC-SG) without information loss?
+        </p>
+
+
+        <h2>2. The Problem: "Which Window is This?"</h2>
+        <p>
+            In modern Modular Construction (PPVC), geometric repetition creates a massive disambiguation challenge.
+        </p>
+        <img src="assets/img/mscd_demo_4_interpreter.jpg" alt="AI Architecture Diagram" class="demo-image">
+        <ul style="padding-left:2em;">
+            <li><strong>The Ambiguity:</strong> A query like <em>"The master bedroom window has a crack"</em> returns <strong>200+ identical GUIDs</strong> in a high-rise BIM model.</li>
+            <li><strong>The Noise:</strong> Site teams communicate in high-entropy, mixed-language (e.g., "Singlish", informal shorthand) that standard LLMs fail to parse accurately.</li>
+            <li><strong>The Silos:</strong> 4D Schedules, 3D Models, and Site Photos exist in disconnected databases.</li>
+        </ul>
+
+
+        <h2>3. The Solution: A 3-Layer Architecture</h2>
+        <h3>The 3 layers:</h3>
+        <ul style="padding-left:2em;">
+            <li>
+            RQ1 (T1) – Cross-modal alignment: photo/issue → IFC element or GUIDs.
+            </li>
+            <li>
+            RQ2 (T2) – Schema-aware mapping: text/forms/context → Compliance fields.
+            </li>
+            <li>
+            RQ3 (T3) – Agentic policy:  interpreter tool calling.
+            </li>
+            *RQ as Research Questions, T as Task
+        </ul>
+
+        <h3>Key: Agentic AI as the Orchestrator (Macro-Level)</h3>
+        <ul style="padding-left:2em;">
+            <li><strong>Goal:</strong> Cross-Modal Disambiguation.</li>
+            <li><strong>Tech:</strong> Google Gemini 2.5 Flash via <strong>Model Context Protocol (MCP)</strong>.</li>
+            <li><strong>Function:</strong> An agent that utilizes <strong>Abductive Reasoning</strong>. By correlating visual cues (e.g., seeing trees vs. sky) with <strong>4D Construction Schedules</strong>, it filters the search space from 200+ candidates down to the single correct GUID.</li>
+        </ul>
+
+        <h3>System Architecture</h3>
+        <img src="assets/img/mscd_demo_11_System_architecture.png" alt="Complete System Architecture" class="demo-image">
+
+
+        <h2>4. Demo & Results</h2>
+        <img src="assets/gif/mscd_demo.gif" alt="Interactive Demo of Semantic Gap Resolution" class="demo-image">
+        <p>
+            <strong>A. The Semantic Gap (Before):</strong> Unstructured site data remains disconnected from BIM schemas, creating ambiguity and requiring manual interpretation.
+        </p>
+        <p>
+            <strong>B. Context-Aware Resolution (After):</strong> The dual-layer system transforms noisy input into precise BIM references through fine-tuned language understanding and visual-temporal reasoning.
+        </p>
+
+        <h2>5. Implementation & Tech Stack</h2>
+        <p>
+            This prototype was built as a proof-of-concept for my Master's Thesis at Carnegie Mellon University.
+        </p>
+        <ul style="padding-left:2em;">
+            <li><strong>Core Logic:</strong> Python, LangChain, LangGraph.</li>
+            <li><strong>BIM Processing:</strong> IfcOpenShell, Neo4j (Graph Database).</li>
+            <li><strong>AI/ML:</strong> Unsloth (Fine-tuning), OpenAI CLIP (Visual Matching), Google Gemini (Reasoning).</li>
+            <li><strong>Protocol:</strong> Model Context Protocol (FastMCP) for standardized tool calling.</li>
+        </ul>
+    </div>
+</body>
+</html>

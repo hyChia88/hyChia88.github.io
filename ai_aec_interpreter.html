@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI for AEC - AI Interpreter</title>
+    <title>AEC Interpreter: Multimodal BIM Element Retrieval</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .notes-container { max-width: 80%; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; }
@@ -18,89 +18,557 @@
         .section-divider { border-top: 1px solid #ddd; margin: 2em 0; }
         img { max-width: 100%; height: auto; margin: 1.5em 0; border-radius: 8px; }
         .demo-image { max-width: 90%; margin: 1.5em auto; display: block; }
+        table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+        th, td { border: 1px solid #ddd; padding: 0.6em 0.8em; text-align: left; }
+        th { background: #f7f7f7; }
+        code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+        pre { background: #f7f7f7; padding: 1em; border-radius: 6px; overflow-x: auto; }
+        blockquote { border-left: 4px solid #ddd; padding-left: 1em; color: #555; margin: 0 0 1.2em 0; }
     </style>
 </head>
 <body>
     <div class="notes-container">
-        <h1>🔄️ AEC AI Interpreter [In-progress]</h1>
-        <p class="subtitle">Bridging the "Semantic Gap" between Messy Site Data and Structured Data</p>
-        
+        <h1>🔄️ AEC Interpreter: Multimodal BIM Element Retrieval [In progress]</h1>
+        <p class="subtitle"><strong>Master's Thesis · Carnegie Mellon University · 2026</strong><br>Multimodal AI system that translates informal construction site reports into structured BIM data.</p>
+
+        <p><strong>Stack:</strong> Python · Gemini 2.5 Flash · Qwen2.5-VL-7B · LoRA (Unsloth) · LangGraph · FastMCP · Neo4j · IfcOpenShell · CLIP · Pydantic · Modal (A100)</p>
+
         <div class="section-divider"></div>
 
-        <h2>1. Motivation & Opportunity</h2>
-        <p>
-            Current AI research in Architecture, Engineering, and Construction (AEC) predominantly clusters into three trajectories:
-        </p>
-        <ol style="padding-left:2em;">
-            <li><strong>Streamlining Heterogeneous Data:</strong> Aligning disparate formats (drawings, schedules, site records) via multimodal training.</li>
-            <li><strong>Conditional Generation:</strong> Generating 3D geometry or BIM models directly from prompts or sketches.</li>
-            <li><strong>Context Understanding:</strong> Leveraging LLMs as conversational agents to retrieve information.</li>
-        </ol>
-        <p>
-            <strong>The Gap:</strong> While these technologies generate <em>new</em> data efficiently, they struggle to interpret the <em>messy, unstructured evidence</em> found in ongoing construction projects.
-        </p>
-        <p>
-            <strong>The Question:</strong> How can we use AI not just to generate models, but to reliably align unstructured site evidence (photos, chat logs) with strict regulatory schemas (IFC-SG) without information loss?
-        </p>
+        <h2>1. Demo</h2>
 
+        <img src="assets/img/ai_aec/screenshots/demo_049.gif" alt="Demo Overview" class="demo-image">
+        <p><em>Live demo: left panel shows case selector + evaluation result. Center shows chat + input modalities. Right shows the 3D BIM viewer — green element = correct prediction, red = wrong.</em></p>
 
-        <h2>2. The Problem: "Which Window is This?"</h2>
-        <p>
-            In modern Modular Construction (PPVC), geometric repetition creates a massive disambiguation challenge.
-        </p>
-        <img src="assets/img/mscd_demo_4_interpreter.jpg" alt="AI Architecture Diagram" class="demo-image">
-        <ul style="padding-left:2em;">
-            <li><strong>The Ambiguity:</strong> A query like <em>"The master bedroom window has a crack"</em> returns <strong>200+ identical GUIDs</strong> in a high-rise BIM model.</li>
-            <li><strong>The Noise:</strong> Site teams communicate in high-entropy, mixed-language (e.g., "Singlish", informal shorthand) that standard LLMs fail to parse accurately.</li>
-            <li><strong>The Silos:</strong> 4D Schedules, 3D Models, and Site Photos exist in disconnected databases.</li>
+        <div class="image-pair">
+            <div class="image-card">
+                <p><strong>Query input — what the system receives:</strong></p>
+                <img src="assets/img/ai_aec/screenshots/query_input.png" alt="Query Input">
+                <p><em>Case: fire door inspection, Duplex_A building. Chat: "Inspecting fire doors here. Need to verify fire rating." Active modalities: Chat + Site Photos + 4D Context.</em></p>
+            </div>
+            <div class="image-card">
+                <p><strong>Pipeline trace — interpretable step-by-step retrieval:</strong></p>
+                <img src="assets/img/ai_aec/screenshots/query_plan.png" alt="Pipeline Trace">
+                <p><em>LoRA_2 extracts: Storey = Level 1, IFC class = IfcDoor (confidence 0.85). Query Planner runs P3 (storey+type → ~50 candidates). Final pool: 6. Ground truth at Rank 1.</em></p>
+            </div>
+        </div>
+
+        <p><strong>LoRA vs Prompt — same case, same inputs:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>LoRA_2 → <strong>CORRECT</strong> ✓</th>
+                    <th>Prompt → <strong>WRONG</strong> ✗</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="assets/img/ai_aec/screenshots/2_049_lora_T.png" alt="LoRA correct"></td>
+                    <td><img src="assets/img/ai_aec/screenshots/2_049_prompt_F.png" alt="Prompt wrong"></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>Case 049 — DXA building (Duplex_A), fire door inspection, MC condition (text + photos + floorplan + 4D). LoRA retrieves the correct GUID; Prompt with identical inputs predicts wrong element (red = GT in right panel).</em></p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>LoRA_2 (text only) → <strong>CORRECT</strong> ✓</th>
+                    <th>Prompt (text + photos + floorplan) → <strong>WRONG</strong> ✗</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><img src="assets/img/ai_aec/screenshots/1_084_lora_T.png" alt="LoRA correct"></td>
+                    <td><img src="assets/img/ai_aec/screenshots/1_084_prompt_F.png" alt="Prompt wrong"></td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>Case 084 — AP building (10-storey office), IfcDoor. LoRA with text-only input (MA) still outperforms Prompt with full multimodal input (MC).</em></p>
+
+        <div class="section-divider"></div>
+
+        <h2>2. The Problem</h2>
+        <p>Construction site inspectors send messages like <em>"look at this door — hinge issue"</em> with a photo. A building model might have <strong>263 windows and 126 doors</strong> — all structurally identical. Which one is it?</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Candidates</th>
+                    <th>Precision</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Text only: <code>"Which window?"</code></td>
+                    <td><strong>263</strong></td>
+                    <td>0.38%</td>
+                </tr>
+                <tr>
+                    <td>+ floor, task status, site photos (4D context)</td>
+                    <td><strong>3</strong></td>
+                    <td>33.33%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>→ <strong>98.9% search space reduction</strong> by fusing multimodal context with structured retrieval.</p>
+        <p>At a higher level, the challenge is <strong>Multimodal Grounding</strong>: mapping informal, unstructured data (natural language, images, plans) to structured schema (IFC) with precision.</p>
+
+        <p><strong>Why this is hard:</strong></p>
+        <ul>
+            <li>Site language is <strong>informal and deictic</strong> ("that one over there") — BIM is typed and schema-driven (<code>IfcWindow</code>, GlobalId)</li>
+            <li>A 10-storey office has <strong>46 geometrically identical windows per floor</strong> — text and vector similarity both hit a mathematical ceiling of 1/46 = <strong>2.2% Top-1</strong></li>
+            <li>Breaking that ceiling requires a different information dimension: <strong>spatial topology</strong></li>
         </ul>
 
+        <p><strong>Research questions:</strong> How can AI act as an interpreter layer to reliably align unstructured site evidence with project data in AEC workflows, with minimal information loss?</p>
 
-        <h2>3. The Solution: A 3-Layer Architecture</h2>
-        <h3>The 3 layers:</h3>
-        <ul style="padding-left:2em;">
-            <li>
-            RQ1 (T1) – Cross-modal alignment: photo/issue → IFC element or GUIDs.
-            </li>
-            <li>
-            RQ2 (T2) – Schema-aware mapping: text/forms/context → Compliance fields.
-            </li>
-            <li>
-            RQ3 (T3) – Agentic policy:  interpreter tool calling.
-            </li>
-            *RQ as Research Questions, T as Task
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Key challenge</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>RQ1</strong></td>
+                    <td>Can multimodal context (photos, floorplan, 4D schedule) identify the correct BIM element?</td>
+                    <td>Attribute entropy: identical elements, only topology differs</td>
+                </tr>
+                <tr>
+                    <td><strong>RQ2</strong></td>
+                    <td>Can the system output a standards-compliant inspection report?</td>
+                    <td>CORENET-X schema validation — zero hallucination required</td>
+                </tr>
+                <tr>
+                    <td><strong>RQ3</strong></td>
+                    <td>Can the system know when it <em>can't</em> identify an element and escalate?</td>
+                    <td>Distinguishing retrieval failure from genuine absence</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <h2>3. System Architecture</h2>
+        <img src="assets/img/ai_aec/diagram/system_architecture_2_simplify.png" alt="System Architecture" class="demo-image">
+        <p>#TODO: ammend the system_architecture_2_simplify.puml and ../diagram/sequence_v2_pipeline.puml, it should be only (baseline: image parser + prompt) or LoRA</p>
+
+        <h3>(a) V1 — Agent-Driven (Baseline)</h3>
+        <p>A <strong>LangGraph ReAct agent</strong> using <strong>MCP (Model Context Protocol)</strong> to call IFC query tools freely.</p>
+
+        <pre><code>Chat + Images + 4D metadata
+  → Gemini 2.5 Flash (ReAct loop)
+  → MCP tool calls: search_by_type, get_by_storey, match_image_to_elements
+  → IFCEngine (IfcOpenShell) + optional CLIP reranker
+  → Result (EvalTrace)</code></pre>
+
+        <p>Works out of the box with no training — but non-deterministic, slow (~8 min / 84 cases), and hard to ablate.</p>
+
+        <h3>(b) V2 — Constraints-Driven (Main Contribution)</h3>
+        <p>Replaces free-form reasoning with an <strong>explicit constraint extraction → deterministic query planning</strong> pipeline.</p>
+
+        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline.png" alt="V2 Pipeline" class="demo-image">
+
+        <pre><code>Chat + Images + 4D metadata
+  → ConditionMask    (modality ablation: text / +photos / +floorplan / ±4D)
+  → ImageParser      (Gemini VLM — cached structured descriptions)
+  → ConstraintsExtractor  (Gemini prompt  OR  LoRA_2 adapter, 0.3ms)
+  → QueryPlanner     (deterministic 7-priority cascade)
+  → RetrievalBackend (memory index  OR  Neo4j Cypher  +  optional CLIP rerank)
+  → EvalTrace + V2Trace</code></pre>
+
+        <p><strong>Extracted schema</strong> (Pydantic-validated, <code>src/v2/types.py</code>):</p>
+        <pre><code class="language-json">{
+  "storey_name": "6 - Sixth Floor",
+  "ifc_class":   "IfcWindow",
+  "near_keywords": ["north", "external"],
+  "space_name": null,
+  "target_name_keyword": null,
+  "neighbor_type": "IfcColumn"
+}</code></pre>
+
+        <p><strong>Two extraction backends — swappable at runtime:</strong></p>
+        <ul>
+            <li><strong>Prompt-only</strong> (Gemini 2.5 Flash) — zero-shot, 15.4s/case, $0.045/case</li>
+            <li><strong>LoRA_2</strong> (Qwen2.5-VL-7B, fine-tuned) — <strong>0.3ms/case</strong>, $0.023/case, <strong>+9.6pp Top-1</strong></li>
         </ul>
 
-        <h3>Key: Agentic AI as the Orchestrator (Macro-Level)</h3>
-        <ul style="padding-left:2em;">
-            <li><strong>Goal:</strong> Cross-Modal Disambiguation.</li>
-            <li><strong>Tech:</strong> Google Gemini 2.5 Flash via <strong>Model Context Protocol (MCP)</strong>.</li>
-            <li><strong>Function:</strong> An agent that utilizes <strong>Abductive Reasoning</strong>. By correlating visual cues (e.g., seeing trees vs. sky) with <strong>4D Construction Schedules</strong>, it filters the search space from 200+ candidates down to the single correct GUID.</li>
+        <div class="section-divider"></div>
+
+        <h2>4. Data Pipeline: Synthetic Training Data</h2>
+        <p>Real site inspection reports are confidential. I built a fully automated synthetic data pipeline — no manual labeling required.</p>
+
+        <img src="assets/img/ai_aec/screenshots/data_curation_overview.png" alt="Dataset Overview" class="demo-image">
+
+        <p><strong>Skeleton-Skin Architecture:</strong></p>
+        <pre><code>IFC geometry  →  deterministic skeleton (ground-truth labels, topology)
+Gemini + Blender  →  noisy multimodal skin (photos, chat, floorplans)</code></pre>
+
+        <p><strong>Pipeline steps:</strong></p>
+        <pre><code>IFC model (IfcOpenShell)
+  1. Build element index (attributes, storey, IFC class)
+  2. Hunt skeletons → ground-truth labels per element
+  3. Blender/Bonsai headless → wireframe renders per element
+  4. Gemini 2.5 Flash → photoreal site photos from wireframes
+  5. matplotlib → floorplan patches from IFC geometry
+  6. Gemini → chat history + 4D metadata per case
+  7. 3× text augmentation → Original / Vague ("look at this") / Urgent ("QA flagged")
+  8. Format to Qwen2.5-VL ChatML → lora_train.jsonl + test_holdout.jsonl</code></pre>
+
+        <p><strong>Dataset: synth_v0.4 — three IFC buildings:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Building</th>
+                    <th>Type</th>
+                    <th>Raw cases</th>
+                    <th>Train (3× aug)</th>
+                    <th>Holdout</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>AdvancedProject (AP)</strong></td>
+                    <td>10-storey office</td>
+                    <td>250</td>
+                    <td>690</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td><strong>BasicHouse (BH)</strong></td>
+                    <td>2-storey residential</td>
+                    <td>31</td>
+                    <td>33</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td><strong>Duplex_A (DXA)</strong></td>
+                    <td>Split-level duplex</td>
+                    <td>80</td>
+                    <td>210</td>
+                    <td>10</td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td></td>
+                    <td>361</td>
+                    <td><strong>933</strong></td>
+                    <td><strong>50</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>LoRA_2 training — Qwen2.5-VL-7B:</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Base model</td>
+                    <td><code>unsloth/Qwen2.5-VL-7B-Instruct-bnb-4bit</code></td>
+                </tr>
+                <tr>
+                    <td>Adapter</td>
+                    <td>LoRA r=16, alpha=32</td>
+                </tr>
+                <tr>
+                    <td>Training samples</td>
+                    <td>933 multimodal cases</td>
+                </tr>
+                <tr>
+                    <td>Epochs</td>
+                    <td>3 · LR: 2e-4 · Effective batch: 16</td>
+                </tr>
+                <tr>
+                    <td>Max seq length</td>
+                    <td>2048</td>
+                </tr>
+                <tr>
+                    <td>Hardware</td>
+                    <td>Modal A100 (40GB)</td>
+                </tr>
+                <tr>
+                    <td>Task</td>
+                    <td>[site photo + floorplan + chat] → constraints JSON</td>
+                </tr>
+                <tr>
+                    <td>Inference latency</td>
+                    <td><strong>0.3ms</strong> (pre-computed) vs 15.4s (Gemini API)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <h2>5. Evaluation & Results</h2>
+        <p><strong>6-condition modality ablation</strong> — 50 holdout cases × 6 conditions × 2 profiles = 600 traces:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Condition</th>
+                    <th>Visual inputs</th>
+                    <th>4D context</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>MA / MA-</td>
+                    <td>Text only</td>
+                    <td>ON / OFF</td>
+                </tr>
+                <tr>
+                    <td>MB / MB-</td>
+                    <td>+ Site photos</td>
+                    <td>ON / OFF</td>
+                </tr>
+                <tr>
+                    <td>MC / MC-</td>
+                    <td>+ Floorplan</td>
+                    <td>ON / OFF</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Paired comparison (MA vs MA-, MB vs MB-, MC vs MC-) isolates the pure 4D contribution.</p>
+
+        <h3>Overall: LoRA_2 vs Prompt</h3>
+        <img src="assets/img/ai_aec/plots/0224_modality_6cond/1_overall_metrics.png" alt="Overall Metrics" class="demo-image">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>LoRA_2</th>
+                    <th>Prompt</th>
+                    <th>Delta</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Top-1 Accuracy</strong></td>
+                    <td><strong>35.3%</strong></td>
+                    <td>25.7%</td>
+                    <td><strong>+9.6 pp</strong></td>
+                </tr>
+                <tr>
+                    <td>Name Match</td>
+                    <td>67.7%</td>
+                    <td>60.0%</td>
+                    <td>+7.7 pp</td>
+                </tr>
+                <tr>
+                    <td>Valid SSR (GT retained)</td>
+                    <td>66.2%</td>
+                    <td>52.8%</td>
+                    <td>+13.4 pp</td>
+                </tr>
+                <tr>
+                    <td>Over-Reduction (GT lost)</td>
+                    <td>64.7%</td>
+                    <td>74.3%</td>
+                    <td>−9.6 pp ✓</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>LoRA not only improves accuracy — it also reduces over-filtering, keeping the ground-truth element in the candidate pool more reliably.</p>
+
+        <h3>Latency & Cost</h3>
+        <img src="assets/img/ai_aec/plots/0224_modality_6cond/4_efficiency_comparison.png" alt="Efficiency Comparison" class="demo-image">
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>LoRA_2</th>
+                    <th>Prompt</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Avg latency/case</td>
+                    <td><strong>0.0s</strong> (precomputed)</td>
+                    <td>15.4s</td>
+                </tr>
+                <tr>
+                    <td>API calls/case</td>
+                    <td>1.0</td>
+                    <td>2.0</td>
+                </tr>
+                <tr>
+                    <td>Est. cost/case</td>
+                    <td><strong>$0.023</strong></td>
+                    <td>$0.045</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Visual Modality Contribution</h3>
+        <img src="assets/img/ai_aec/plots/0224_modality_6cond/9_modality_stack_MA_MB_MC.png" alt="Modality Contribution" class="demo-image">
+        <ul>
+            <li><strong>Floorplan adds the most (+10pp for LoRA)</strong> — spatial layout is a strong geometric anchor</li>
+            <li>Site photos alone (MB) add noise without spatial grounding (−2pp), potentialy due to dirty data -&gt; need to improve the quality gate for synthetic data</li>
+            <li>Prompt model's gains are inconsistent — fine-tuning is needed to exploit spatial signals reliably</li>
         </ul>
 
-        <h3>System Architecture</h3>
-        <img src="assets/img/mscd_demo_11_System_architecture.png" alt="Complete System Architecture" class="demo-image">
+        <h3>4D Context Impact</h3>
+        <img src="assets/img/ai_aec/plots/0224_modality_6cond/12_4d_paired_ablation.png" alt="4D Ablation" class="demo-image">
+        <p>4D project context (floor schedule, active task) adds a <strong>consistent +3–7pp across all modality levels</strong>. The gain is largest when combined with floorplan (MC: +7pp), confirming 4D and visual inputs are complementary.</p>
 
+        <h3>Generalization Across Buildings</h3>
+        <img src="assets/img/ai_aec/plots/0224_modality_6cond/11_modality_x_building.png" alt="Building × Modality" class="demo-image">
+        <table>
+            <thead>
+                <tr>
+                    <th>Building</th>
+                    <th>MA (Text+4D)</th>
+                    <th>MB (+Photos)</th>
+                    <th>MC (+Floorplan)</th>
+                    <th>Key insight</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>AP</strong> (10-storey office)</td>
+                    <td>8%</td>
+                    <td>5%</td>
+                    <td>10%</td>
+                    <td>Densest building — near attribute entropy floor</td>
+                </tr>
+                <tr>
+                    <td><strong>BH</strong> (2-storey house)</td>
+                    <td>45%</td>
+                    <td><strong>62%</strong></td>
+                    <td>60%</td>
+                    <td>Photos give +18pp — few elements, easy disambiguation</td>
+                </tr>
+                <tr>
+                    <td><strong>DXA</strong> (split-level)</td>
+                    <td>35%</td>
+                    <td>30%</td>
+                    <td><strong>45%</strong></td>
+                    <td>Floorplan gives +15pp — complex spatial layout</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h2>4. Demo & Results</h2>
-        <img src="assets/gif/mscd_demo.gif" alt="Interactive Demo of Semantic Gap Resolution" class="demo-image">
-        <p>
-            <strong>A. The Semantic Gap (Before):</strong> Unstructured site data remains disconnected from BIM schemas, creating ambiguity and requiring manual interpretation.
-        </p>
-        <p>
-            <strong>B. Context-Aware Resolution (After):</strong> The dual-layer system transforms noisy input into precise BIM references through fine-tuned language understanding and visual-temporal reasoning.
-        </p>
+        <p>LoRA_2 generalizes across all three buildings without per-building fine-tuning.</p>
 
-        <h2>5. Implementation & Tech Stack</h2>
-        <p>
-            This prototype was built as a proof-of-concept for my Master's Thesis at Carnegie Mellon University.
-        </p>
-        <ul style="padding-left:2em;">
-            <li><strong>Core Logic:</strong> Python, LangChain, LangGraph.</li>
-            <li><strong>BIM Processing:</strong> IfcOpenShell, Neo4j (Graph Database).</li>
-            <li><strong>AI/ML:</strong> Unsloth (Fine-tuning), OpenAI CLIP (Visual Matching), Google Gemini (Reasoning).</li>
-            <li><strong>Protocol:</strong> Model Context Protocol (FastMCP) for standardized tool calling.</li>
-        </ul>
+        <h3>Key Insights & Trade-offs</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>What works</th>
+                    <th>What doesn't (yet)</th>
+                    <th>Engineering lesson</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>V2 constraints pipeline: SSR &gt; 80% consistently</td>
+                    <td>AP building Top-1 ≈ 8% (near 1/46 floor)</td>
+                    <td>Attribute filtering can't break homogeneity</td>
+                </tr>
+                <tr>
+                    <td>LoRA adapter: 0.3ms inference, −9.6pp over-reduction</td>
+                    <td>Storey extraction fails on vague chat</td>
+                    <td>Wrong storey = catastrophic filter failure</td>
+                </tr>
+                <tr>
+                    <td>Floorplan grounding: +10pp for LoRA</td>
+                    <td>Site photos can hurt on complex buildings</td>
+                    <td>VLM needs spatial anchoring, not global scene</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-divider"></div>
+
+        <h2>6. What's Next: V2.5 Neuro-Symbolic <em>(in progress)</em></h2>
+        <p>The core unsolved problem: <strong>46 identical elements per floor → 2.2% Top-1 ceiling</strong>. Attribute matching and CLIP similarity both fail here — the elements are mathematically indistinguishable by intrinsic properties alone.</p>
+
+        <p><strong>The fix:</strong> Introduce spatial topology as an independent signal. Two elements that are visually identical can still have unique <em>relationships</em> to their neighbors.</p>
+
+        <pre><code>[PLANNED] V2.5 Architecture
+
+NEURO LAYER (LoRA_3 — Qwen2.5-VL-7B)
+  New input: Relation Crop (union AABB of subject + reference element)
+  New output: spatial_relations: [{subject, predicate, object}]
+  Predicates: FILLS | CONTINUOUS | ADJACENT_TO | ON_TOP_OF
+
+QUERY COMPILER (Python — zero LLM)
+  spatial_triplet → Cypher template → Neo4j graph query
+  Fallback: ADJACENT_TO → ON_STOREY → type-only (no regression)
+
+SYMBOLIC LAYER (Neo4j)
+  Pre-computed topological edges from IFC geometry
+  Zero hallucination — no LLM in the retrieval step</code></pre>
+
+        <p><strong>Relation Crop</strong> is the core training innovation — instead of cropping a single element (Wang et al. 2025), crop the <em>interface boundary</em> between two elements. The model can't shortcut ("railings are near stairs") — it must reason from local pixel topology.</p>
+
+        <p><strong>Target benchmark (H2 hard negatives):</strong></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>System</th>
+                    <th>Top-1 on 46 identical elements</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>V2 LoRA_2 / CLIP baseline</td>
+                    <td>~2.2% (1/46)</td>
+                </tr>
+                <tr>
+                    <td>V2.5 Neuro-Symbolic <em>(target)</em></td>
+                    <td><strong>60–80%</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>Predicate vocabulary</strong> (architectural model — no MEP):</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Predicate</th>
+                    <th>Mining method</th>
+                    <th>Est. instances</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>FILLS</code></td>
+                    <td><code>IfcRelFillsElement</code> (IFC schema)</td>
+                    <td>~389</td>
+                </tr>
+                <tr>
+                    <td><code>CONTINUOUS</code></td>
+                    <td>Wall <code>Top ≠ storey_name</code> field</td>
+                    <td>~771</td>
+                </tr>
+                <tr>
+                    <td><code>ADJACENT_TO</code></td>
+                    <td>Centroid distance &lt; 1.5m</td>
+                    <td>~200–400</td>
+                </tr>
+                <tr>
+                    <td><code>ON_TOP_OF</code></td>
+                    <td>Z-axis comparison + AABB overlap</td>
+                    <td>~19–40</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><code>FILLS</code> and <code>CONTINUOUS</code> are free — extracted directly from the IFC schema without any geometry computation.</p>
     </div>
 </body>
 </html>
