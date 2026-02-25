@@ -77,6 +77,25 @@ html, body {
     flex-direction: column;
 }
 
+/* Back link nav */
+.nav-container {
+    max-width: 1200px;
+    margin: var(--space-md) auto 0;
+    padding: 0 var(--space-md);
+}
+
+.back-link {
+    display: inline-block;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: var(--text-sm);
+}
+
+.back-link:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
 /* Header styles */
 .header {
     text-align: center;
@@ -273,7 +292,7 @@ h2 {
     overflow: visible;
     transition: transform var(--transition-base), box-shadow var(--transition-base);
     z-index: 1;
-    cursor: pointer;
+    cursor: default;
     transform-origin: center;
 }
 
