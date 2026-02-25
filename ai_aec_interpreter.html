@@ -6,24 +6,282 @@
     <title>AEC Interpreter: Multimodal BIM Element Retrieval</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .notes-container { max-width: 80%; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-        h1 { font-size: 220%; margin-bottom: 0.3em; }
-        .subtitle { font-size: 130%; color: #666; font-style: italic; margin-bottom: 1.5em; }
-        h2 { font-size: 180%; margin-top: 1.5em; margin-bottom: 0.5em; }
-        h3 { font-size: 140%; margin-top: 1.2em; margin-bottom: 0.5em; }
-        p { margin-bottom: 0.8em; line-height: 1.6; }
-        ul, ol { margin-bottom: 1em; line-height: 1.8; }
-        li { margin-bottom: 0.5em; }
-        strong { font-weight: 600; }
-        .section-divider { border-top: 1px solid #ddd; margin: 2em 0; }
-        img { max-width: 100%; height: auto; margin: 1.5em 0; border-radius: 8px; }
-        .demo-image { max-width: 90%; margin: 1.5em auto; display: block; }
-        table { width: 100%; border-collapse: collapse; margin: 1em 0; }
-        th, td { border: 1px solid #ddd; padding: 0.6em 0.8em; text-align: left; }
-        th { background: #f7f7f7; }
-        code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-        pre { background: #f7f7f7; padding: 1em; border-radius: 6px; overflow-x: auto; }
-        blockquote { border-left: 4px solid #ddd; padding-left: 1em; color: #555; margin: 0 0 1.2em 0; }
+        /* Container & Layout */
+        .notes-container {
+            max-width: 85%;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            padding: 3em 4em;
+        }
+
+        /* Typography Hierarchy */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5em;
+            line-height: 1.2;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #555;
+            font-style: italic;
+            margin-bottom: 1.5em;
+            line-height: 1.6;
+            border-left: 4px solid #0066cc;
+            padding-left: 1em;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 2em;
+            margin-bottom: 0.8em;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.3em;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.8em;
+            margin-bottom: 0.6em;
+            color: #333;
+        }
+
+        /* Content Spacing */
+        p {
+            margin-bottom: 1em;
+            line-height: 1.7;
+            color: #333;
+        }
+
+        ul, ol {
+            margin-bottom: 1.2em;
+            line-height: 1.8;
+            padding-left: 1.5em;
+        }
+
+        li {
+            margin-bottom: 0.6em;
+        }
+
+        strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* Visual Elements */
+        .section-divider {
+            border-top: 2px solid #e0e0e0;
+            margin: 3em 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 1.5em 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-image {
+            max-width: 95%;
+            margin: 2em auto;
+            display: block;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Image Pair Layout */
+        .image-pair {
+            display: flex;
+            gap: 2em;
+            margin: 2em 0;
+        }
+
+        .image-card {
+            flex: 1;
+            background: #fafafa;
+            padding: 1.5em;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+        }
+
+        .image-card p:first-child {
+            margin-top: 0;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .image-card img {
+            margin: 1em 0;
+            border-radius: 6px;
+        }
+
+        .image-card em {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Image Trio Layout */
+        .image-trio {
+            display: flex;
+            gap: 1.5em;
+            margin: 2em 0;
+            justify-content: center;
+        }
+
+        .image-card-trio {
+            flex: 1;
+            background: #fafafa;
+            padding: 1.2em;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .image-card-trio img {
+            width: 100%;
+            height: auto;
+            margin: 0 0 0.8em 0;
+            border-radius: 6px;
+        }
+
+        .image-card-trio p {
+            margin: 0.3em 0;
+        }
+
+        .image-card-trio p:first-of-type {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 1rem;
+        }
+
+        .image-card-trio em {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5em 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 0.8em 1em;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        td {
+            background: #fff;
+        }
+
+        tr:hover td {
+            background: #fafafa;
+        }
+
+        /* Code Blocks */
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: #f5f5f5;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 1.2em;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #e0e0e0;
+            line-height: 1.5;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: #333;
+        }
+
+        blockquote {
+            border-left: 4px solid #0066cc;
+            padding-left: 1.2em;
+            color: #555;
+            margin: 1.5em 0;
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .notes-container {
+                max-width: 90%;
+                padding: 2.5em 3em;
+            }
+
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            h3 { font-size: 1.3rem; }
+        }
+
+        @media (max-width: 768px) {
+            .notes-container {
+                max-width: 95%;
+                padding: 2em;
+            }
+
+            .image-pair {
+                flex-direction: column;
+                gap: 1.5em;
+            }
+
+            .image-trio {
+                flex-direction: column;
+                gap: 1.2em;
+            }
+
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.2rem; }
+
+            .subtitle { font-size: 1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .notes-container {
+                padding: 1.5em;
+            }
+
+            h1 { font-size: 1.75rem; }
+            h2 { font-size: 1.4rem; }
+            h3 { font-size: 1.1rem; }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.6em 0.8em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -33,7 +291,7 @@
 
     <div class="notes-container">
         <h1>🔄️ AEC Interpreter: Multimodal BIM Element Retrieval [In progress]</h1>
-        <p class="subtitle"><strong>Master's Thesis · Carnegie Mellon University · 2026</strong><br>Multimodal AI system that translates informal construction site reports into structured BIM data.</p>
+        <p class="subtitle"><strong>Master's Thesis · Carnegie Mellon University · 2026</strong><br>Multimodal AI system that maps informal construction site data into structured BIM data.</p>
 
         <p><strong>Stack:</strong> Python · Gemini 2.5 Flash · Qwen2.5-VL-7B · LoRA (Unsloth) · LangGraph · FastMCP · Neo4j · IfcOpenShell · CLIP · Pydantic · Modal (A100)</p>
 
@@ -127,7 +385,7 @@
             <li>Breaking that ceiling requires a different information dimension: <strong>spatial topology</strong></li>
         </ul>
 
-        <p><strong>Research questions:</strong> How can AI act as an interpreter layer to reliably align unstructured site evidence with project data in AEC workflows, with minimal information loss?</p>
+        <p><strong>Core research questions:</strong> How can AI act as an interpreter layer to reliably align unstructured site evidence with project data in AEC workflows, with minimal information loss?</p>
 
         <table>
             <thead>
@@ -146,7 +404,7 @@
                 <tr>
                     <td><strong>RQ2</strong></td>
                     <td>Can the system output a standards-compliant inspection report?</td>
-                    <td>CORENET-X schema validation — zero hallucination required</td>
+                    <td>Report schema validation — zero hallucination required</td>
                 </tr>
                 <tr>
                     <td><strong>RQ3</strong></td>
@@ -159,9 +417,7 @@
         <div class="section-divider"></div>
 
         <h2>3. System Architecture</h2>
-        <img src="assets/img/ai_aec/diagram/system_architecture_2_simplify.png" alt="System Architecture" class="demo-image">
-        <p>#TODO: ammend the system_architecture_2_simplify.puml and ../diagram/sequence_v2_pipeline.puml, it should be only (baseline: image parser + prompt) or LoRA</p>
-
+        <img src="assets/img/ai_aec/diagram/system_architecture.png" alt="System Architecture" class="demo-image">
         <h3>(a) V1 — Agent-Driven (Baseline)</h3>
         <p>A <strong>LangGraph ReAct agent</strong> using <strong>MCP (Model Context Protocol)</strong> to call IFC query tools freely.</p>
 
@@ -176,7 +432,7 @@
         <h3>(b) V2 — Constraints-Driven (Main Contribution)</h3>
         <p>Replaces free-form reasoning with an <strong>explicit constraint extraction → deterministic query planning</strong> pipeline.</p>
 
-        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline.png" alt="V2 Pipeline" class="demo-image">
+        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline_simplified.png" alt="V2 Pipeline" class="demo-image">
 
         <pre><code>Chat + Images + 4D metadata
   → ConditionMask    (modality ablation: text / +photos / +floorplan / ±4D)
@@ -267,49 +523,34 @@ Gemini + Blender  →  noisy multimodal skin (photos, chat, floorplans)</code></
             </tbody>
         </table>
 
+        <div class="image-trio">
+            <div class="image-card-trio">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_ap.png" alt="AdvancedProject Building">
+                <p><strong>AdvancedProject (AP)</strong></p>
+                <p><em>10-storey office tower</em></p>
+            </div>
+            <div class="image-card-trio">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_bh.png" alt="BasicHouse Building">
+                <p><strong>BasicHouse (BH)</strong></p>
+                <p><em>2-storey residential</em></p>
+            </div>
+            <div class="image-card-trio">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_dxa.png" alt="Duplex_A Building">
+                <p><strong>Duplex_A (DXA)</strong></p>
+                <p><em>Split-level duplex</em></p>
+            </div>
+        </div>
+        <p style="text-align: center;"><em>The three IFC buildings used for dataset generation, providing diverse architectural complexity for training and evaluation.</em></p>
+
         <p><strong>LoRA_2 training — Qwen2.5-VL-7B:</strong></p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Parameter</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Base model</td>
-                    <td><code>unsloth/Qwen2.5-VL-7B-Instruct-bnb-4bit</code></td>
-                </tr>
-                <tr>
-                    <td>Adapter</td>
-                    <td>LoRA r=16, alpha=32</td>
-                </tr>
-                <tr>
-                    <td>Training samples</td>
-                    <td>933 multimodal cases</td>
-                </tr>
-                <tr>
-                    <td>Epochs</td>
-                    <td>3 · LR: 2e-4 · Effective batch: 16</td>
-                </tr>
-                <tr>
-                    <td>Max seq length</td>
-                    <td>2048</td>
-                </tr>
-                <tr>
-                    <td>Hardware</td>
-                    <td>Modal A100 (40GB)</td>
-                </tr>
-                <tr>
-                    <td>Task</td>
-                    <td>[site photo + floorplan + chat] → constraints JSON</td>
-                </tr>
-                <tr>
-                    <td>Inference latency</td>
-                    <td><strong>0.3ms</strong> (pre-computed) vs 15.4s (Gemini API)</td>
-                </tr>
-            </tbody>
-        </table>
+        <pre><code>Base model:         unsloth/Qwen2.5-VL-7B-Instruct-bnb-4bit
+Adapter:            LoRA r=16, alpha=32
+Training samples:   933 multimodal cases
+Epochs:             3 · LR: 2e-4 · Effective batch: 16
+Max seq length:     2048
+Hardware:           Modal A100 (40GB)
+Task:               [site photo + floorplan + chat] → constraints JSON
+Inference latency:  0.3ms (pre-computed) vs 15.4s (Gemini API)</code></pre>
 
         <div class="section-divider"></div>
 
@@ -346,7 +587,7 @@ Gemini + Blender  →  noisy multimodal skin (photos, chat, floorplans)</code></
         <p>Paired comparison (MA vs MA-, MB vs MB-, MC vs MC-) isolates the pure 4D contribution.</p>
 
         <h3>Overall: LoRA_2 vs Prompt</h3>
-        <img src="assets/img/ai_aec/plots/0224_modality_6cond/1_overall_metrics.png" alt="Overall Metrics" class="demo-image">
+        <img src="assets/img/ai_aec/plots/1_overall_metrics.png" alt="Overall Metrics" class="demo-image">
 
         <table>
             <thead>
@@ -388,7 +629,7 @@ Gemini + Blender  →  noisy multimodal skin (photos, chat, floorplans)</code></
         <p>LoRA not only improves accuracy — it also reduces over-filtering, keeping the ground-truth element in the candidate pool more reliably.</p>
 
         <h3>Latency & Cost</h3>
-        <img src="assets/img/ai_aec/plots/0224_modality_6cond/4_efficiency_comparison.png" alt="Efficiency Comparison" class="demo-image">
+        <img src="assets/img/ai_aec/plots/4_efficiency_comparison.png" alt="Efficiency Comparison" class="demo-image">
         <table>
             <thead>
                 <tr>
@@ -417,19 +658,15 @@ Gemini + Blender  →  noisy multimodal skin (photos, chat, floorplans)</code></
         </table>
 
         <h3>Visual Modality Contribution</h3>
-        <img src="assets/img/ai_aec/plots/0224_modality_6cond/9_modality_stack_MA_MB_MC.png" alt="Modality Contribution" class="demo-image">
+        <img src="assets/img/ai_aec/plots/9_modality_stack_MA_MB_MC.png" alt="Modality Contribution" class="demo-image">
         <ul>
             <li><strong>Floorplan adds the most (+10pp for LoRA)</strong> — spatial layout is a strong geometric anchor</li>
             <li>Site photos alone (MB) add noise without spatial grounding (−2pp), potentialy due to dirty data -&gt; need to improve the quality gate for synthetic data</li>
             <li>Prompt model's gains are inconsistent — fine-tuning is needed to exploit spatial signals reliably</li>
         </ul>
 
-        <h3>4D Context Impact</h3>
-        <img src="assets/img/ai_aec/plots/0224_modality_6cond/12_4d_paired_ablation.png" alt="4D Ablation" class="demo-image">
-        <p>4D project context (floor schedule, active task) adds a <strong>consistent +3–7pp across all modality levels</strong>. The gain is largest when combined with floorplan (MC: +7pp), confirming 4D and visual inputs are complementary.</p>
-
         <h3>Generalization Across Buildings</h3>
-        <img src="assets/img/ai_aec/plots/0224_modality_6cond/11_modality_x_building.png" alt="Building × Modality" class="demo-image">
+        <img src="assets/img/ai_aec/plots/11_modality_x_building.png" alt="Building × Modality" class="demo-image">
         <table>
             <thead>
                 <tr>
