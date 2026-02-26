@@ -758,13 +758,28 @@ Inference latency:  0.3ms (pre-computed) vs 15.4s (Gemini API)</code></pre>
         <div class="section-divider"></div>
 
         <h2>6. What's Next: V2.5 Neuro-Symbolic <em>(in progress)</em></h2>
-        <p>The core unsolved problem: <strong>46 identical elements per floor → 2.2% Top-1 ceiling</strong>. Attribute matching and CLIP similarity both fail here — the elements are mathematically indistinguishable by intrinsic properties alone.</p>
+        <p>The core challenge: When a floor contains <strong>46 identical elements, accuracy peaks at 2.2%</strong> (random guess). Attribute matching and CLIP similarity both fail — the elements are mathematically identical in isolation.</p>
 
-        <p><strong>The fix:</strong> Introduce spatial topology as an independent signal. Two elements that are visually identical can still have unique <em>relationships</em> to their neighbors.</p>
+        <p><strong>Solution:</strong> Use spatial topology as a distinguishing signal. While two elements may be visually identical, they have unique <em>spatial relationships</em> to neighboring elements.</p>
+
         <img src="assets/img/ai_aec/screenshots/scene_graph_sample.png" alt="scene_graph_sample" class="demo-image" style="width: 80%; max-width: 800px;">
-        <code>[IfcWindow, CONTAINED_IN, IfcWall]</code><br>
-        <code>[IfcColumn, ADJACENT_TO, IfcWall]</code><br>
-        <code>[IfcWindow, ADJACENT_TO, IfcColumn]</code><br>
+        <p style="text-align: center; margin-top: 0.5em;"><em>Example spatial relationships extracted from the BIM model:
+        <code>[IfcWindow, CONTAINED_IN, IfcWall]</code>
+        <code>[IfcColumn, ADJACENT_TO, IfcWall]</code>
+        <code>[IfcWindow, ADJACENT_TO, IfcColumn]</code>
+        </em></p>
+
+        <p><strong>Example Cypher query</strong> using spatial relationships:</p>
+        <pre><code>// Match the spatial pattern: window → wall, column → wall, window → column
+MATCH (window:IfcWindow)-[:CONTAINED_IN]->(wall:IfcWall),
+      (column:IfcColumn)-[:ADJACENT_TO]-(wall),
+      (window)-[:ADJACENT_TO]-(column)
+
+// Return unique IDs to sync with the BIM viewer
+RETURN window.GlobalId AS TargetWindowID,
+       column.GlobalId AS AnchorColumnID,
+       wall.GlobalId AS HostWallID</code></pre>
+        <p><em>The scene graph creates a topological fingerprint. By requiring the window to be adjacent to a specific column, the query filters out visually identical windows that don't share this spatial configuration.</em></p>
         <br>
         <pre><code>[PLANNED] V2.5 Architecture
 
@@ -781,9 +796,9 @@ SYMBOLIC LAYER (Neo4j)
   Pre-computed topological edges from IFC geometry
   Zero hallucination — no LLM in the retrieval step</code></pre>
 
-        <p><strong>Relation Crop</strong> is the core training innovation — instead of cropping a single element (Wang et al. 2025), crop the <em>interface boundary</em> between two elements. The model can't shortcut ("railings are near stairs") — it must reason from local pixel topology.</p>
+        <p><strong>Relation Crop</strong> — the key training innovation. Instead of cropping a single element (Wang et al. 2025), we crop the <em>interface boundary</em> between two elements. This forces the model to reason from local geometric topology rather than global visual shortcuts (e.g., "railings are typically near stairs").</p>
 
-        <p><strong>Target benchmark (H2 hard negatives):</strong></p>
+        <p><strong>Target benchmark</strong> (46 identical elements per floor):</p>
         <table>
             <thead>
                 <tr>
@@ -803,7 +818,7 @@ SYMBOLIC LAYER (Neo4j)
             </tbody>
         </table>
 
-        <p><strong>Predicate vocabulary</strong> (architectural model — no MEP):</p>
+        <p><strong>Spatial relationship vocabulary</strong> (architectural elements only):</p>
         <table>
             <thead>
                 <tr>
@@ -836,7 +851,7 @@ SYMBOLIC LAYER (Neo4j)
             </tbody>
         </table>
 
-        <p><code>FILLS</code> and <code>CONTINUOUS</code> are free — extracted directly from the IFC schema without any geometry computation.</p>
+        <p><em>Note: <code>FILLS</code> and <code>CONTINUOUS</code> are extracted directly from IFC schema metadata — no geometric computation required.</em></p>
     </div>
 </body>
 </html>
