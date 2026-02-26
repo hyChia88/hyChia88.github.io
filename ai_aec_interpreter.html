@@ -12,7 +12,6 @@
             margin: 40px auto;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
             padding: 3em 4em;
         }
 
@@ -86,7 +85,6 @@
             height: auto;
             margin: 1.5em 0;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .demo-image {
@@ -106,9 +104,8 @@
         .image-card {
             flex: 1;
             background: #fafafa;
-            padding: 1.5em;
+            padding: 1em;
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
         }
 
         .image-card p:first-child {
@@ -138,17 +135,17 @@
 
         .image-card-trio {
             flex: 1;
-            background: #fafafa;
-            padding: 1.2em;
+            background: #ffffff;
+            padding: 0.3em;
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
             text-align: center;
         }
 
         .image-card-trio img {
             width: 100%;
-            height: auto;
-            margin: 0 0 0.8em 0;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            margin: 0 0 0.3em 0;
             border-radius: 6px;
         }
 
@@ -195,10 +192,9 @@
 
         /* Tables */
         table {
-            width: 100%;
+            width: 80%;
             border-collapse: collapse;
             margin: 1.5em 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             border-radius: 8px;
             overflow: hidden;
         }
@@ -329,7 +325,7 @@
         <img src="assets/img/ai_aec/screenshots/demo_049.gif" alt="Demo Overview" class="demo-image">
         <p><em>Live demo: left panel shows case selector + evaluation result. Center shows chat + input modalities. Right shows the 3D BIM viewer — green element = correct prediction, red = wrong.</em></p>
 
-        <h2>Problem</h2>
+        <h2>1. Problem</h2>
         <p>Construction site inspectors send messages like <em>"look at this door — hinge issue"</em> with a photo. A building model might have <strong>263 windows and 126 doors</strong> — all structurally identical. Which one is it?</p>
 
         <table>
@@ -386,7 +382,7 @@
             </tbody>
         </table>
 
-        <h2>Approach</h2>
+        <h2>2. Approach</h2>
         <p>To address these research questions, I built a complete demo system and evaluated multimodal grounding capabilities across several frameworks: <strong>v1: an Agent-Driven</strong> framework baseline, <strong>v2: Constraints-Driven</strong> with different model: Gemini and fine-tuned LoRA with domain specific training.</p>
 
         <div class="image-grid">
@@ -459,7 +455,7 @@
         <h3>(b) V2 — Constraints-Driven (Main Contribution)</h3>
         <p>Replaces free-form reasoning with an <strong>explicit constraint extraction → deterministic query planning</strong> pipeline.</p>
 
-        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline_simplified.png" alt="V2 Pipeline" class="demo-image">
+        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline_simplified.png" alt="V2 Pipeline" class="demo-image" style="width: 80%; max-width: 800px;">
 
         <pre><code>Chat + Images + 4D metadata
   → ConditionMask    (modality ablation: text / +photos / +floorplan / ±4D)
@@ -552,17 +548,17 @@ Gemini + Blender  →  noisy multimodal skin (photos, chat, floorplans)</code></
 
         <div class="image-trio">
             <div class="image-card-trio">
-                <img src="assets/img/ai_aec/screenshots/ifc_model_ap.png" alt="AdvancedProject Building" style="width: 80%; max-width: 300px;">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_ap.png" alt="AdvancedProject Building" style="width: 80%; max-width: 300px; box-shadow: none;">
                 <p><strong>AdvancedProject (AP)</strong></p>
                 <p><em>10-storey office tower</em></p>
             </div>
             <div class="image-card-trio">
-                <img src="assets/img/ai_aec/screenshots/ifc_model_bh.png" alt="BasicHouse Building" style="width: 80%; max-width: 300px;">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_bh.png" alt="BasicHouse Building" style="width: 80%; max-width: 300px; box-shadow: none;">
                 <p><strong>BasicHouse (BH)</strong></p>
                 <p><em>2-storey residential</em></p>
             </div>
             <div class="image-card-trio">
-                <img src="assets/img/ai_aec/screenshots/ifc_model_dxa.png" alt="Duplex_A Building" style="width: 80%; max-width: 300px;">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_dxa.png" alt="Duplex_A Building" style="width: 80%; max-width: 300px; box-shadow: none;">
                 <p><strong>Duplex_A (DXA)</strong></p>
                 <p><em>Split-level duplex</em></p>
             </div>
