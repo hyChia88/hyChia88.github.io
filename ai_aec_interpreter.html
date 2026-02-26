@@ -761,7 +761,11 @@ Inference latency:  0.3ms (pre-computed) vs 15.4s (Gemini API)</code></pre>
         <p>The core unsolved problem: <strong>46 identical elements per floor → 2.2% Top-1 ceiling</strong>. Attribute matching and CLIP similarity both fail here — the elements are mathematically indistinguishable by intrinsic properties alone.</p>
 
         <p><strong>The fix:</strong> Introduce spatial topology as an independent signal. Two elements that are visually identical can still have unique <em>relationships</em> to their neighbors.</p>
-
+        <img src="assets/img/ai_aec/screenshots/scene_graph_sample.png" alt="scene_graph_sample" class="demo-image" style="width: 80%; max-width: 800px;">
+        <code>[IfcWindow, CONTAINED_IN, IfcWall]</code><br>
+        <code>[IfcColumn, ADJACENT_TO, IfcWall]</code><br>
+        <code>[IfcWindow, ADJACENT_TO, IfcColumn]</code><br>
+        <br>
         <pre><code>[PLANNED] V2.5 Architecture
 
 NEURO LAYER (LoRA_3 — Qwen2.5-VL-7B)
