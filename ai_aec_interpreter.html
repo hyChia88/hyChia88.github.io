@@ -167,6 +167,32 @@
             color: #666;
         }
 
+        /* Image Grid 2x2 Layout - Simple Style */
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5em;
+            margin: 2em 0;
+        }
+
+        .image-grid-item {
+            text-align: center;
+        }
+
+        .image-grid-item img {
+            width: 100%;
+            height: auto;
+            margin: 0 0 0.5em 0;
+            border-radius: 6px;
+            box-shadow: none;
+        }
+
+        .image-grid-item p {
+            margin: 0.5em 0 0 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
         /* Tables */
         table {
             width: 100%;
@@ -258,6 +284,11 @@
                 gap: 1.2em;
             }
 
+            .image-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2em;
+            }
+
             h1 { font-size: 2rem; }
             h2 { font-size: 1.6rem; }
             h3 { font-size: 1.2rem; }
@@ -295,23 +326,85 @@
 
         <p><strong>Stack:</strong> Python · Gemini 2.5 Flash · Qwen2.5-VL-7B · LoRA (Unsloth) · LangGraph · FastMCP · Neo4j · IfcOpenShell · CLIP · Pydantic · Modal (A100)</p>
 
-        <div class="section-divider"></div>
-
-        <h2>1. Demo</h2>
-
         <img src="assets/img/ai_aec/screenshots/demo_049.gif" alt="Demo Overview" class="demo-image">
         <p><em>Live demo: left panel shows case selector + evaluation result. Center shows chat + input modalities. Right shows the 3D BIM viewer — green element = correct prediction, red = wrong.</em></p>
 
-        <div class="image-pair">
-            <div class="image-card">
-                <p><strong>Query input — what the system receives:</strong></p>
-                <img src="assets/img/ai_aec/screenshots/query_input.png" alt="Query Input">
-                <p><em>Case: fire door inspection, Duplex_A building. Chat: "Inspecting fire doors here. Need to verify fire rating." Active modalities: Chat + Site Photos + 4D Context.</em></p>
+        <h2>Problem</h2>
+        <p>Construction site inspectors send messages like <em>"look at this door — hinge issue"</em> with a photo. A building model might have <strong>263 windows and 126 doors</strong> — all structurally identical. Which one is it?</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Candidates</th>
+                    <th>Precision</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Text only: <code>"Which window?"</code></td>
+                    <td><strong>263</strong></td>
+                    <td>0.38%</td>
+                </tr>
+                <tr>
+                    <td>+ floor, task status, site photos (4D context)</td>
+                    <td><strong>3</strong></td>
+                    <td>33.33%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>→ <strong>98.9% search space reduction</strong> by fusing multimodal context with structured retrieval.</p>
+        <p>At a higher level, the challenge is <strong>Multimodal Grounding</strong> and <strong>Schema Alignment</strong>: mapping informal, unstructured data (natural language, images, plans) to structured schema (IFC) with <strong>zero hallucination</strong>.</p>
+
+        <p><strong>Core research questions:</strong> How can AI act as an interpreter layer to reliably align unstructured site evidence with project data in AEC workflows, with minimal information loss?</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Key challenge</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>RQ1</strong></td>
+                    <td>Can multimodal context (photos, floorplan, 4D schedule) identify the correct BIM element?</td>
+                    <td>Attribute entropy: identical elements, only topology differs</td>
+                </tr>
+                <tr>
+                    <td><strong>RQ2</strong></td>
+                    <td>Can the system output a standards-compliant inspection report?</td>
+                    <td>Report schema validation — zero hallucination required</td>
+                </tr>
+                <tr>
+                    <td><strong>RQ3</strong></td>
+                    <td>Can the system know when it <em>can't</em> identify an element and escalate?</td>
+                    <td>Distinguishing retrieval failure from genuine absence</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Approach</h2>
+        <p>To address these research questions, I built a complete demo system and evaluated multimodal grounding capabilities across several frameworks: <strong>v1: an Agent-Driven</strong> framework baseline, <strong>v2: Constraints-Driven</strong> with different model: Gemini and fine-tuned LoRA with domain specific training.</p>
+
+        <div class="image-grid">
+            <div class="image-grid-item">
+                <img src="assets/img/ai_aec/screenshots/query_input.png" alt="Query Input" style="width: 80%; max-width: 300px;">
+                <p><strong>Query input</strong> — what the system receives</p>
             </div>
-            <div class="image-card">
-                <p><strong>Pipeline trace — interpretable step-by-step retrieval:</strong></p>
-                <img src="assets/img/ai_aec/screenshots/query_plan.png" alt="Pipeline Trace">
-                <p><em>LoRA_2 extracts: Storey = Level 1, IFC class = IfcDoor (confidence 0.85). Query Planner runs P3 (storey+type → ~50 candidates). Final pool: 6. Ground truth at Rank 1.</em></p>
+            <div class="image-grid-item">
+                <img src="assets/img/ai_aec/screenshots/query_plan.png" alt="Pipeline Trace" style="width: 80%; max-width: 300px;">
+                <p><strong>Pipeline trace</strong> — step-by-step retrieval</p>
+            </div>
+            <div class="image-grid-item">
+                <img src="assets/img/ai_aec/screenshots/query_filtered_viz.png" alt="Query Filtered Visualization" style="width: 80%; max-width: 400px;">
+                <p><strong>Query filtered visualization</strong></p>
+            </div>
+            <div class="image-grid-item">
+                <img src="assets/img/ai_aec/screenshots/query_result.png" alt="Pipeline Result" style="width: 80%; max-width: 400px;">
+                <p><strong>Pipeline result</strong></p>
             </div>
         </div>
 
@@ -350,74 +443,8 @@
 
         <div class="section-divider"></div>
 
-        <h2>2. The Problem</h2>
-        <p>Construction site inspectors send messages like <em>"look at this door — hinge issue"</em> with a photo. A building model might have <strong>263 windows and 126 doors</strong> — all structurally identical. Which one is it?</p>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Input</th>
-                    <th>Candidates</th>
-                    <th>Precision</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Text only: <code>"Which window?"</code></td>
-                    <td><strong>263</strong></td>
-                    <td>0.38%</td>
-                </tr>
-                <tr>
-                    <td>+ floor, task status, site photos (4D context)</td>
-                    <td><strong>3</strong></td>
-                    <td>33.33%</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p>→ <strong>98.9% search space reduction</strong> by fusing multimodal context with structured retrieval.</p>
-        <p>At a higher level, the challenge is <strong>Multimodal Grounding</strong>: mapping informal, unstructured data (natural language, images, plans) to structured schema (IFC) with precision.</p>
-
-        <p><strong>Why this is hard:</strong></p>
-        <ul>
-            <li>Site language is <strong>informal and deictic</strong> ("that one over there") — BIM is typed and schema-driven (<code>IfcWindow</code>, GlobalId)</li>
-            <li>A 10-storey office has <strong>46 geometrically identical windows per floor</strong> — text and vector similarity both hit a mathematical ceiling of 1/46 = <strong>2.2% Top-1</strong></li>
-            <li>Breaking that ceiling requires a different information dimension: <strong>spatial topology</strong></li>
-        </ul>
-
-        <p><strong>Core research questions:</strong> How can AI act as an interpreter layer to reliably align unstructured site evidence with project data in AEC workflows, with minimal information loss?</p>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Question</th>
-                    <th>Key challenge</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>RQ1</strong></td>
-                    <td>Can multimodal context (photos, floorplan, 4D schedule) identify the correct BIM element?</td>
-                    <td>Attribute entropy: identical elements, only topology differs</td>
-                </tr>
-                <tr>
-                    <td><strong>RQ2</strong></td>
-                    <td>Can the system output a standards-compliant inspection report?</td>
-                    <td>Report schema validation — zero hallucination required</td>
-                </tr>
-                <tr>
-                    <td><strong>RQ3</strong></td>
-                    <td>Can the system know when it <em>can't</em> identify an element and escalate?</td>
-                    <td>Distinguishing retrieval failure from genuine absence</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="section-divider"></div>
-
         <h2>3. System Architecture</h2>
-        <img src="assets/img/ai_aec/diagram/system_architecture.png" alt="System Architecture" class="demo-image">
+        <img src="assets/img/ai_aec/diagram/system_architecture.png" alt="System Architecture" class="demo-image" style="width: 80%; max-width: 800px;">
         <h3>(a) V1 — Agent-Driven (Baseline)</h3>
         <p>A <strong>LangGraph ReAct agent</strong> using <strong>MCP (Model Context Protocol)</strong> to call IFC query tools freely.</p>
 
@@ -525,17 +552,17 @@ Gemini + Blender  →  noisy multimodal skin (photos, chat, floorplans)</code></
 
         <div class="image-trio">
             <div class="image-card-trio">
-                <img src="assets/img/ai_aec/screenshots/ifc_model_ap.png" alt="AdvancedProject Building">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_ap.png" alt="AdvancedProject Building" style="width: 80%; max-width: 300px;">
                 <p><strong>AdvancedProject (AP)</strong></p>
                 <p><em>10-storey office tower</em></p>
             </div>
             <div class="image-card-trio">
-                <img src="assets/img/ai_aec/screenshots/ifc_model_bh.png" alt="BasicHouse Building">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_bh.png" alt="BasicHouse Building" style="width: 80%; max-width: 300px;">
                 <p><strong>BasicHouse (BH)</strong></p>
                 <p><em>2-storey residential</em></p>
             </div>
             <div class="image-card-trio">
-                <img src="assets/img/ai_aec/screenshots/ifc_model_dxa.png" alt="Duplex_A Building">
+                <img src="assets/img/ai_aec/screenshots/ifc_model_dxa.png" alt="Duplex_A Building" style="width: 80%; max-width: 300px;">
                 <p><strong>Duplex_A (DXA)</strong></p>
                 <p><em>Split-level duplex</em></p>
             </div>
