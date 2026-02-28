@@ -324,9 +324,11 @@
 
         <img src="assets/img/ai_aec/screenshots/demo_049.gif" alt="Demo Overview" class="demo-image">
         <p><em>Live demo: left panel shows case selector + evaluation result. Center shows chat + input modalities. Right shows the 3D BIM viewer — green element = correct prediction, red = wrong.</em></p>
-
+        <img src="assets/img/ai_aec/screenshots/b4_after.png" alt="Demo Overview 2" style="max-width: 400px;" align="center">
         <h2>1. Problem</h2>
         <p>Construction site inspectors send messages like <em>"look at this door — hinge issue"</em> with a photo. A building model might have <strong>263 windows and 126 doors</strong> — all structurally identical. Which one is it?</p>
+        <img src="assets/img/ai_aec/screenshots/problem.png" alt="Problem Statement">
+        <p><em>With AI Interpreters help:</em></p>
 
         <table>
             <thead>
@@ -384,8 +386,8 @@
 
         <h2>2. Approach</h2>
         <p>To address these research questions, I built a complete demo system and evaluated multimodal grounding capabilities across several frameworks: <strong>v1: an Agent-Driven</strong> framework baseline, <strong>v2: Constraints-Driven</strong> with different model: Gemini and fine-tuned LoRA with domain specific training.</p>
-
-        <div class="image-grid">
+        <img src="assets/img/ai_aec/screenshots/sample_pipeline.png" alt="Demo Overview" style="max-width: 800px;">
+        <!-- <div class="image-grid">
             <div class="image-grid-item">
                 <img src="assets/img/ai_aec/screenshots/query_input.png" alt="Query Input" style="width: 80%; max-width: 300px;">
                 <p><strong>Query input</strong> — what the system receives</p>
@@ -402,7 +404,7 @@
                 <img src="assets/img/ai_aec/screenshots/query_result.png" alt="Pipeline Result" style="width: 80%; max-width: 400px;">
                 <p><strong>Pipeline result</strong></p>
             </div>
-        </div>
+        </div> -->
 
         <p><strong>LoRA vs Prompt — same case, same inputs:</strong></p>
         <table>
@@ -414,8 +416,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><img src="assets/img/ai_aec/screenshots/2_049_lora_T.png" alt="LoRA correct"></td>
-                    <td><img src="assets/img/ai_aec/screenshots/2_049_prompt_F.png" alt="Prompt wrong"></td>
+                    <td><img src="assets/img/ai_aec/screenshots/2_049_lora_T.png" alt="LoRA correct" class="demo-image" ></td>
+                    <td><img src="assets/img/ai_aec/screenshots/2_049_prompt_F.png" alt="Prompt wrong" class="demo-image" ></td>
                 </tr>
             </tbody>
         </table>
@@ -430,8 +432,8 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><img src="assets/img/ai_aec/screenshots/1_084_lora_T.png" alt="LoRA correct"></td>
-                    <td><img src="assets/img/ai_aec/screenshots/1_084_prompt_F.png" alt="Prompt wrong"></td>
+                    <td><img src="assets/img/ai_aec/screenshots/1_084_lora_T.png" alt="LoRA correct" class="demo-image" ></td>
+                    <td><img src="assets/img/ai_aec/screenshots/1_084_prompt_F.png" alt="Prompt wrong" class="demo-image" ></td>
                 </tr>
             </tbody>
         </table>
@@ -440,7 +442,7 @@
         <div class="section-divider"></div>
 
         <h2>3. System Architecture</h2>
-        <img src="assets/img/ai_aec/diagram/system_architecture.png" alt="System Architecture" class="demo-image" style="width: 80%; max-width: 800px;">
+        <img src="assets/img/ai_aec/diagram/system_architecture.png" alt="System Architecture" >
         <h3>(a) V1 — Agent-Driven (Baseline)</h3>
         <p>A <strong>LangGraph ReAct agent</strong> using <strong>MCP (Model Context Protocol)</strong> to call IFC query tools freely.</p>
 
@@ -455,15 +457,7 @@
         <h3>(b) V2 — Constraints-Driven (Main Contribution)</h3>
         <p>Replaces free-form reasoning with an <strong>explicit constraint extraction → deterministic query planning</strong> pipeline.</p>
 
-        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline_simplified.png" alt="V2 Pipeline" class="demo-image" style="width: 80%; max-width: 800px;">
-
-        <pre><code>Chat + Images + 4D metadata
-  → ConditionMask    (modality ablation: text / +photos / +floorplan / ±4D)
-  → ImageParser      (Gemini VLM — cached structured descriptions)
-  → ConstraintsExtractor  (Gemini prompt  OR  LoRA_2 adapter, 0.3ms)
-  → QueryPlanner     (deterministic 7-priority cascade)
-  → RetrievalBackend (memory index  OR  Neo4j Cypher  +  optional CLIP rerank)
-  → EvalTrace + V2Trace</code></pre>
+        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline_simplified.png" alt="V2 Pipeline">
 
         <p><strong>Extracted schema</strong> (Pydantic-validated, <code>src/v2/types.py</code>):</p>
         <pre><code class="language-json">{
@@ -472,7 +466,9 @@
   "near_keywords": ["north", "external"],
   "space_name": null,
   "target_name_keyword": null,
-  "neighbor_type": "IfcColumn"
+  "neighbor_type": "IfcColumn",
+  "spatial_relation": "ADJACENT_TO",
+  "spatial_relation_neighbor_type": "IfcColumn"
 }</code></pre>
 
         <p><strong>Two extraction backends — swappable at runtime:</strong></p>
@@ -481,7 +477,6 @@
             <li><strong>LoRA_2</strong> (Qwen2.5-VL-7B, fine-tuned) — <strong>0.3ms/case</strong>, $0.023/case, <strong>+9.6pp Top-1</strong></li>
         </ul>
 
-        <div class="section-divider"></div>
 
         <h2>4. Data Pipeline: Synthetic Training Data</h2>
         <p>Real site inspection reports are confidential. I built a fully automated synthetic data pipeline — no manual labeling required.</p>
