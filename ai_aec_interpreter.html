@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AEC Interpreter: Agentic AI for BIM Retrieval</title>
+    <title>AEC Interpreter: Neuro-Symbolic AI for BIM Retrieval</title>
     <link rel="stylesheet" href="style.css">
     <style>
         /* Container & Layout */
@@ -63,7 +63,7 @@
         <div class="vision-statement" style="background: #f8f9fa; padding: 1.5em 2em; border-left: 4px solid #1a1a1a; margin-bottom: 2em; border-radius: 0 8px 8px 0;">
             <h3>Overview of My Research Vision</h3>
             <p><strong>Bridging Site Reality and Strict Schemas with Zero Hallucination</strong></p>
-            <p>My architectural background revealed a fundamental disconnect in construction tech: the physical site generates messy, unstructured data, while digital twins demand strict, geometric topologies. To bridge this semantic gap, my research focuses on two critical technical pillars: <strong>multimodal grounding</strong> to interpret domain-specific site evidence, and <strong>ontology-based schema alignment</strong> to map that visual evidence directly into formal architectural graphs. By combining neural perception with deterministic graph queries, this neuro-symbolic framework guarantees zero-hallucination data retrieval, laying the groundwork for truly autonomous AEC systems.</p>
+            <p>AEC Interpreter is an AI middleware I built for my thesis that bridges the gap between physical and digital data in construction: physical site generates messy, unstructured data, while digital twins demand strict, geometric topologies. To bridge this gap, my research focuses on two critical technical pillars: <strong>multimodal grounding</strong> to interpret domain-specific site evidence, and <strong>ontology-based schema alignment</strong> to map that visual evidence directly into formal architectural graphs. By combining neural perception with deterministic graph queries, this neuro-symbolic framework guarantees zero-hallucination data retrieval, laying the groundwork for truly autonomous AEC systems.</p>
         </div>
 
         <h2>1. The Broken Workflow: Solving the "WHERE"</h2>
@@ -115,7 +115,7 @@
         <h4>1. The Neuro Layer (Perception)</h4>
         <p>A highly optimized Vision-Language Model (Qwen2.5-VL-7B fine-tuned via LoRA) digests noisy, multimodal site inputs to extract precise structural constraints.</p>
         <ul>
-            <li><strong>Relation-Region Crops <em>(In Progress)</em>:</strong> To overcome VLM "Shortcut Learning" (where models guess spatial relationships based on language priors), the VLM is trained explicitly on the interface boundaries between elements. This forces it to extract physical topological predicates like <code>ADJACENT_TO</code> or <code>CONTINUOUS</code> based on actual visual evidence.</li>
+            <li><strong>Relation-Region Crops:</strong> To overcome VLM "Shortcut Learning" (where models guess spatial relationships based on language priors), the VLM is trained explicitly on the interface boundaries between elements. This forces it to extract physical topological predicates like <code>ADJACENT_TO</code> or <code>CONTINUOUS</code> based on actual visual evidence.</li>
         </ul>
         <img src="assets/img/ai_aec/screenshots/relation-region crop.png" alt="Relation-Region Crops" class="demo-image">
 
@@ -128,7 +128,7 @@
   "spatial_relation": "ADJACENT_TO",
   "spatial_relation_neighbor_type": "IfcColumn"
 }</code></pre>
-
+        </br>
         <h4>3. The Symbolic Layer (Retrieval)</h4>
         <p>The extracted JSON schema passes through a Python template compiler to generate a Cypher query. <strong>Crucially, there is zero LLM involvement in this final step.</strong> The deterministic graph traversal runs directly against the Neo4j/IFC graph database, guaranteeing 100% ontological compliance and zero hallucination.</p>
 
@@ -139,7 +139,10 @@ MATCH (window:IfcWindow)-[:CONTAINED_IN]->(wall:IfcWall),
 RETURN window.GlobalId AS TargetWindowID</code></pre>
 
         <!-- <div class="section-divider"></div> -->
-
+        <div style="margin: 2em 0;">
+            <img src="assets/img/ai_aec/screenshots/graph_enrichment_local.png" alt="IFC Knowledge Graph Enrichment: Base vs Enriched" class="demo-image">
+            <p><strong>IFC Knowledge Graph Enrichment:</strong> The base IFC graph (left) contains only vertical containment and fill relations. The enriched graph (right) adds lateral topology edges — <code>CONNECTS_TO</code>, <code>ADJACENT_TO</code>, <code>NEXT_TO</code> — enabling multi-hop spatial queries that disambiguate geometrically identical elements.</p>
+        </div>
 <h2>3. Data Pipeline: Overcoming the Data Bottleneck</h2>
         <p>Because real construction site data is highly confidential and lacks structured spatial annotations, I engineered a fully automated synthetic data pipeline—the <strong>"Skeleton-Skin" architecture</strong>—to train the Neuro layer with zero manual labeling.</p>
 
@@ -188,68 +191,162 @@ Latency: ~1s (local LoRA) vs ~4.5s (API)</code></pre>
         </div>
 
 <h2>4. Evaluation & Results</h2>
-        <p>The attribute-extraction pipeline (LoRA_2) was evaluated via a 6-condition modality ablation on a 50-case holdout set across 6 conditions (300 total runs). This isolated the distinct impact of textual, visual, and 2D spatial context on retrieval accuracy. The topology-aware LoRA_3 (with spatial triplet extraction) is currently under 3-way comparative evaluation.</p>
+        
+        <p>Evaluation is designed across two tiers matching the pipeline stages: <strong>Neuro</strong> (VLM extraction quality) → <strong>Symbolic</strong> (graph retrieval accuracy). The unified evaluation spans 116 test cases across 3 IFC models (AP: 1,233 elements, BH: 53 elements, DXA: 258 elements).</p>
 
-        <img src="assets/img/ai_aec/plots/1_overall_metrics.png" alt="Overall Metrics" class="demo-image">
+        <h3>4.1 Architecture Soundness: Oracle Upper Bound</h3>
+        <p>The most important result: under <strong>perfect extraction</strong> (ground-truth spatial triplets fed to the symbolic layer), the graph retrieval achieves <strong>91.5% GT-in-Pool</strong> with an average candidate pool of 59 — down from 1,257 total elements.</p>
+
+        <img src="assets/img/ai_aec/plots/oracle_waterfall_v2.png" alt="Oracle Pipeline Waterfall" class="demo-image">
+
+        <p>This proves the symbolic layer is architecturally sound. The 49pp gap between Oracle (91.5%) and the best learned model (42.2%) is <strong>entirely due to VLM extraction quality</strong> — a solvable problem, not an architectural one.</p>
+
+        <h3>4.2 Unified Cross-Model Comparison (n=116, 3 IFC Models)</h3>
+        <p>Four extraction systems compared on the same unified test set with the optimal <code>p0∪p1</code> (union) query strategy:</p>
+        
+        <img src="assets/img/ai_aec/plots/U1_gt_in_pool_comparison.png" alt="Unified GT-in-Pool Comparison" class="demo-image">
 
         <table>
             <thead>
                 <tr>
-                    <th>Metric</th>
-                    <th>LoRA_2 (Fine-Tuned)</th>
-                    <th>Gemini Prompt (Zero-Shot)</th>
-                    <th>Delta</th>
+                    <th>System</th>
+                    <th>GT-in-Pool</th>
+                    <th>Top-1</th>
+                    <th>MRR@10</th>
+                    <th>Avg Pool</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>Top-1 Accuracy</strong></td>
-                    <td><strong>35.3%</strong></td>
-                    <td>25.7%</td>
-                    <td><strong style="color: #0066cc;">+9.6 pp</strong></td>
+                    <td><strong>LoRA₅-r32</strong> (fine-tuned, spatial)</td>
+                    <td><strong style="color: #0066cc;">42.2%</strong></td>
+                    <td>3.4%</td>
+                    <td>0.057</td>
+                    <td>70</td>
                 </tr>
                 <tr>
-                    <td>Valid SSR (Ground Truth retained)</td>
-                    <td><strong>66.2%</strong></td>
-                    <td>52.8%</td>
-                    <td><strong style="color: #0066cc;">+13.4 pp</strong></td>
+                    <td><strong>LoRA₅-r16</strong> (fine-tuned, spatial)</td>
+                    <td>41.4%</td>
+                    <td><strong style="color: #0066cc;">4.3%</strong></td>
+                    <td><strong style="color: #0066cc;">0.074</strong></td>
+                    <td>68</td>
+                </tr>
+                <tr>
+                    <td>Gemini 2.5 Flash (zero-shot prompt)</td>
+                    <td>36.2%</td>
+                    <td>4.3%</td>
+                    <td>0.075</td>
+                    <td>56</td>
+                </tr>
+                <tr>
+                    <td>LoRA₂ (attribute-only, no spatial)</td>
+                    <td>28.4%</td>
+                    <td>1.7%</td>
+                    <td>0.050</td>
+                    <td>60</td>
                 </tr>
             </tbody>
         </table>
 
-        <p><strong>LoRA vs. Prompt Pipeline Trace:</strong></p>
+        <p><strong>Key takeaways:</strong> Fine-tuned spatial extraction (LoRA₅-r32) outperforms zero-shot Gemini by <strong>+6pp</strong> on GT-in-Pool and attribute-only LoRA₂ by <strong>+13.8pp</strong>, confirming that topology-based retrieval adds meaningful value beyond attribute filtering alone.</p>
+
+        <h3>4.3 Decomposable Failure Analysis</h3>
+        <p>Every failure is traceable to a specific pipeline stage — a key advantage of the neuro-symbolic decomposition over black-box neural retrieval:</p>
+
         <table>
             <thead>
                 <tr>
-                    <th>LoRA_2 → <strong>CORRECT</strong> ✓</th>
-                    <th>Gemini Prompt → <strong>HALLUCINATION</strong> ✗</th>
+                    <th>Failure Category</th>
+                    <th>%</th>
+                    <th>Root Cause</th>
+                    <th>Improvement Path</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td><img src="assets/img/ai_aec/screenshots/2_049_lora_T.png" alt="LoRA correct" class="demo-image" style="margin: 0; box-shadow: none;"></td>
-                    <td><img src="assets/img/ai_aec/screenshots/2_049_prompt_F.png" alt="Prompt wrong" class="demo-image" style="margin: 0; box-shadow: none;"></td>
+                    <td><strong>ifc_class wrong</strong></td>
+                    <td><strong>39%</strong></td>
+                    <td>VLM predicts wrong element type → Cypher filters incorrectly</td>
+                    <td>Class-balanced training, confusion-aware hard negatives</td>
+                </tr>
+                <tr>
+                    <td><strong>GT in pool, not Top-1</strong></td>
+                    <td>24%</td>
+                    <td>Retrieval works but no learned reranker</td>
+                    <td>Attribute-matching scorer (storey +1, type +1, keyword +1)</td>
+                </tr>
+                <tr>
+                    <td><strong>Storey wrong</strong></td>
+                    <td>22%</td>
+                    <td>Wrong floor → wrong candidate pool</td>
+                    <td>Floor-indicator visual training, metadata fusion</td>
+                </tr>
+                <tr>
+                    <td>Large pool, no discrimination</td>
+                    <td>10%</td>
+                    <td>Correct predicate but pool too large for ranking</td>
+                    <td>Tighter spatial constraints, multi-hop refinement</td>
+                </tr>
+                <tr style="background: #f0f8ff;">
+                    <td><strong>Top-1 success ✓</strong></td>
+                    <td>5%</td>
+                    <td>—</td>
+                    <td>—</td>
                 </tr>
             </tbody>
         </table>
-        <p><em>Case 049: The fine-tuned LoRA successfully maps noisy, ambiguous visual and text inputs directly to the correct GUID. The zero-shot baseline, given the exact same context, hallucinates the spatial location entirely.</em></p>
 
-        <h3>Key Engineering Insights</h3>
+        <h3>4.4 Two-Layer Hallucination Resistance</h3>
+        <div style="background: #f8f9fa; padding: 1.5em 2em; border-radius: 8px; margin: 1.5em 0;">
+            <p><strong>Layer 1 — Schema Alignment (VLM output):</strong></p>
+            <ul>
+                <li>✅ Format compliance: <strong>100% valid JSON</strong> across all models and conditions — format-level hallucination is eliminated</li>
+                <li>⚠️ Content accuracy: ifc_class ~63%, storey ~82% (unified) — field-level accuracy remains the primary improvement target</li>
+            </ul>
+            <p><strong>Layer 2 — Symbolic Guardrail (Neo4j execution):</strong></p>
+            <ul>
+                <li>✅ Invalid triplets → empty Cypher result → deterministic fallback to attribute-only queries (detectable failure)</li>
+                <li>⚠️ Valid-but-wrong triplets → non-empty incorrect pool (silent failure — requires per-field confidence gating)</li>
+            </ul>
+            <p><em>The system does not depend on VLM self-restraint for hallucination resistance. The symbolic layer acts as a post-hoc validator: wrong constraints either produce empty results (caught) or wrong pools (addressable via confidence gating).</em></p>
+        </div>
+
+        <h3>4.5 Strategy Discovery: Union Beats Intersection</h3>
+        <p>A critical engineering finding: when spatial extraction accuracy is imperfect, the query strategy matters as much as extraction quality.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Strategy</th>
+                    <th>LoRA₅-r32 GT-in-Pool</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="background: #fff0f0;">
+                    <td>p0 ∩ p1 (intersection)</td>
+                    <td><strong style="color: #cc0000;">25.9%</strong></td>
+                    <td>Spatial AND storey+type — over-prunes when spatial is wrong</td>
+                </tr>
+                <tr style="background: #f0fff0;">
+                    <td><strong>p0 ∪ p1 (union)</strong></td>
+                    <td><strong style="color: #0066cc;">42.2%</strong></td>
+                    <td>Spatial OR storey+type — preserves safety net, +16.3pp recovery</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><strong>Key insight:</strong> Spatial triplets at current VLM accuracy should be used for <strong>pool size compression</strong> (avg 40 vs 68 candidates), not GT discovery. Storey+type remains the safety net for GT retention. When one retrieval signal is less mature, use union not intersection.</p>
+
+        <h3>4.6 Key Research Findings</h3>
         <ul>
             <li>
-                <strong>Floorplans Provide Geometric Anchoring:</strong> 
-                Generic VLMs struggle with pure 3D scene recognition in homogeneous environments. Adding 2D floorplan crops to the multimodal prompt provided necessary spatial anchoring, driving a <strong>+10pp increase</strong> in LoRA accuracy.
+                <strong>Modality Crossover:</strong> Different modalities serve different pipeline stages. Floorplans (with explicit annotations) help <em>attribute extraction</em>; site photos (with 3D depth context) help <em>spatial reasoning</em>. Combining all modalities (MA) does NOT outperform the best single-modality condition — the model cannot yet fuse cross-modal cues. This motivates <strong>modality-aware routing</strong>: separate extractors for attributes and spatial relations.
             </li>
-            <img src="assets/img/ai_aec/plots/9_modality_stack_MA_MB_MC.png" alt="Ablation Results" class="demo-image">
-            
+            <img src="assets/img/ai_aec/plots/9_modality_stack_MA_MB_MC.png" alt="Modality Ablation Results" class="demo-image">
             <li>
-                <strong>Protecting the Ground Truth:</strong> 
-                The fine-tuned LoRA drastically reduced "over-filtering"—the fatal retrieval error of accidentally dropping the correct element from the candidate pool—proving its robustness against noisy, real-world site data.
+                <strong>Multi-Task Capacity Tradeoff:</strong> Adding spatial triplet supervision to the same LoRA r=16 adapter degrades ifc_class accuracy from >60% to 49.2%. Since ifc_class is a prerequisite for Cypher queries (<code>WHERE node.ifc_type = $type</code>), this creates a paradox: spatial capability gained at the cost of the attribute accuracy it depends on. Addressable via higher rank (r=64), staged training, or separate extractors.
             </li>
-            
             <li>
-                <strong>The Topology Imperative <em>(In Progress)</em>:</strong>
-                The empirical data confirms our core hypothesis: attribute filtering alone cannot overcome the mathematical deadlock of high-density buildings. LoRA_3 (1,377 cases, spatial triplet supervision) already achieves 93% spatial predicate accuracy and 0% false positive rate on held-out test data. End-to-end evaluation with Neo4j graph traversal (Priority-0 Cypher queries) is underway — projected to push Top-1 accuracy well beyond the current 35.3% ceiling.
+                <strong>The Attribute Entropy Deadlock:</strong> On a floor with 46 geometrically identical IfcWindows, attribute-only retrieval is mathematically limited to ~2.2% Top-1. The Oracle spatial pipeline breaks this deadlock with 91.5% GT retention and avg pool of 59 — proving topology-based discrimination is both necessary and achievable.
             </li>
         </ul>
     </div>
