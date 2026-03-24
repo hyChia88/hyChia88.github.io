@@ -252,7 +252,7 @@ Latency: ~1s (local LoRA) vs ~4.5s (API)</code></pre>
 
         <p>This proves the symbolic layer is <strong>provably correct</strong>. The gap between Oracle (100%) and the best learned model (42.2%) is entirely due to VLM extraction errors — a solvable problem, not an architectural one. Spatial stages add the final 2% GT retention that P1 misses, plus 40% additional pool compression (47→31).</p>
 
-        <h3>4.2 Unified Cross-Model Comparison (n=116, 3 IFC Models)</h3>
+        <h3>4.2 Neuro layer, VLM Extraction Comparison (n=116, 3 IFC Models)</h3>
         <p>Four extraction systems compared on the same unified test set with the optimal <code>p0∪p1</code> (union) query strategy:</p>
         
         <img src="assets/img/ai_aec/plots/U1_gt_in_pool_comparison.png" alt="Unified GT-in-Pool Comparison" class="demo-image">
@@ -378,7 +378,7 @@ Latency: ~1s (local LoRA) vs ~4.5s (API)</code></pre>
             <p><em>The system does not depend on VLM self-restraint for hallucination resistance. The symbolic layer acts as a post-hoc validator: wrong constraints either produce empty results (caught) or wrong pools (addressable via confidence gating).</em></p>
         </div>
 
-        <h3>4.5 Strategy Discovery: Union Beats Intersection</h3>
+        <h3>4.5 Symbolic, Query Strategy Discovery: Union Beats Intersection</h3>
         <p>A critical engineering finding: when spatial extraction accuracy is imperfect, the query strategy matters as much as extraction quality.</p>
         <table>
             <thead>
