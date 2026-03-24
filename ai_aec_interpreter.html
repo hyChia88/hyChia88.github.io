@@ -52,7 +52,7 @@
         <a href="index.html" class="back-link">← Back to Main</a>
     </nav>
 <div class="notes-container">
-        <h1>🔄️ AEC Interpreter: Neuro-Symbolic AI for Zero-Hallucination BIM Retrieval</h1>
+        <h1>🔄️ AEC Interpreter: Neuro-Symbolic AI for BIM Retrieval</h1>
         <p class="subtitle">An AI middleware that bridges the gap between physical and digital data in construction — linking unstructured site evidence to the correct BIM elements, down to the GUID level.</p>
 
         <p><strong>Tech Stack:</strong> Python · Gemini 2.5 Flash · Qwen2.5-VL-7B · LoRA (Unsloth) · LangGraph · FastMCP · Neo4j · IfcOpenShell · Pydantic · Modal (A100)</p>
@@ -121,7 +121,7 @@
         </ul>
         <img src="assets/img/ai_aec/screenshots/relation-region crop.png" alt="Relation-Region Crops" class="demo-image">
 
-        <h4>2. The Pydantic Contract (The Bridge)</h4>
+        <p><b>The Pydantic Contract (The Bridge)</b></p>
         <p>The Neuro layer is not allowed to generate free text. It must output a strictly typed Pydantic schema. This acts as the impenetrable boundary between the probabilistic AI perception and the deterministic backend.</p>
 
         <pre><code class="language-json">{
@@ -131,7 +131,7 @@
   "spatial_relation_neighbor_type": "IfcColumn"
 }</code></pre>
         </br>
-        <h4>3. The Symbolic Layer (Retrieval)</h4>
+        <h4>2. The Symbolic Layer (Retrieval)</h4>
         <p>The extracted JSON schema passes through a Python template compiler to generate a Cypher query. <strong>Crucially, there is zero LLM involvement in this final step.</strong> The deterministic graph traversal runs directly against the Neo4j/IFC graph database, guaranteeing 100% ontological compliance and zero hallucination.</p>
 
         <pre><code>// Auto-compiled Cypher Query executed against Neo4j
