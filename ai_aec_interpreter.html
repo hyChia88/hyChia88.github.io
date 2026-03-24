@@ -215,22 +215,22 @@ Latency: ~1s (local LoRA) vs ~4.5s (API)</code></pre>
                 <tr>
                     <td>Full elements</td>
                     <td>100</td>
-                    <td>917</td>
+                    <td>1044</td>
                     <td>—</td>
                     <td>100%</td>
                 </tr>
                 <tr>
                     <td>P1 (storey+type)</td>
                     <td>100</td>
-                    <td>47</td>
+                    <td>57</td>
                     <td><strong>−95%</strong></td>
-                    <td>98%</td>
+                    <td>99%</td>
                 </tr>
                 <tr>
                     <td>1-hop spatial</td>
                     <td>78</td>
                     <td>39</td>
-                    <td>−16%</td>
+                    <td>−31%</td>
                     <td><strong>100%</strong></td>
                 </tr>
                 <tr>
@@ -250,7 +250,7 @@ Latency: ~1s (local LoRA) vs ~4.5s (API)</code></pre>
             </tbody>
         </table>
 
-        <p>This proves the symbolic layer is <strong>provably correct</strong>. The gap between Oracle (100%) and the best learned model (42.2%) is entirely due to VLM extraction errors — a solvable problem, not an architectural one. Spatial stages add the final 2% GT retention that P1 misses, plus 40% additional pool compression (47→31).</p>
+        <p>This proves the symbolic layer is <strong>provably correct</strong>. The gap between Oracle (100%) and the best learned model (42.2%) is entirely due to VLM extraction errors — a solvable problem, not an architectural one.</p>
 
         <h3>4.2 Neuro layer, VLM Extraction Comparison (n=116, 3 IFC Models)</h3>
         <p>Four extraction systems compared on the same unified test set with the optimal <code>p0∪p1</code> (union) query strategy:</p>
@@ -315,7 +315,7 @@ Latency: ~1s (local LoRA) vs ~4.5s (API)</code></pre>
                 </tr>
             </tbody>
         </table>
-        <p><em>Same multimodal input: the fine-tuned model maps noisy site evidence to the correct GUID. The zero-shot baseline hallucinates the spatial location entirely.</em></p>
+        <p><em>Same multimodal input under the fine-tuned model and gemini(zero-shot) model.</em></p>
 
         <h3>4.3 Decomposable Failure Analysis</h3>
         <p>Every failure is traceable to a specific pipeline stage — a key advantage of the neuro-symbolic decomposition over black-box neural retrieval:</p>
@@ -405,12 +405,12 @@ Latency: ~1s (local LoRA) vs ~4.5s (API)</code></pre>
 
         <h3>4.6 Key Research Findings</h3>
         <ul>
-            <li>
+            <!-- <li>
                 <strong>Modality Crossover:</strong> Different modalities serve different pipeline stages. Floorplans (with explicit annotations) help <em>attribute extraction</em>; site photos (with 3D depth context) help <em>spatial reasoning</em>. Combining all modalities (MA) does NOT outperform the best single-modality condition — the model cannot yet fuse cross-modal cues. This motivates <strong>modality-aware routing</strong>: separate extractors for attributes and spatial relations.
             </li>
-            <img src="assets/img/ai_aec/plots/9_modality_stack_MA_MB_MC.png" alt="Modality Ablation Results" class="demo-image">
+            <img src="assets/img/ai_aec/plots/9_modality_stack_MA_MB_MC.png" alt="Modality Ablation Results" class="demo-image"> -->
             <li>
-                <strong>Multi-Task Capacity Tradeoff:</strong> Adding spatial triplet supervision to the same LoRA r=16 adapter degrades ifc_class accuracy from >60% to 49.2%. Since ifc_class is a prerequisite for Cypher queries (<code>WHERE node.ifc_type = $type</code>), this creates a paradox: spatial capability gained at the cost of the attribute accuracy it depends on. Addressable via higher rank (r=64), staged training, or separate extractors.
+                <strong>Multi-Task Capacity Tradeoff:</strong> Adding spatial triplet supervision to the same LoRA r=16 adapter degrades ifc_class accuracy from >60% to 49.2%. Since ifc_class is a prerequisite for Cypher queries (<code>WHERE node.ifc_type = $type</code>), this creates a paradox: spatial capability gained at the cost of the attribute accuracy it depends on. Addressable via higher rank (r=32), staged training, or separate extractors.
             </li>
             <li>
                 <strong>The Attribute Entropy Deadlock:</strong> On a floor with 46 geometrically identical IfcWindows, attribute-only retrieval is mathematically limited to ~2.2% Top-1. The GT-Reverse Oracle breaks this deadlock with <strong>100% GT retention</strong> and avg pool of 31 — proving topology-based discrimination is both necessary and achievable.
