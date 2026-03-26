@@ -106,15 +106,15 @@
 <h2>2. System Architecture: The Neuro-Symbolic Engine</h2>
         <p>To eliminate the hallucination risks inherent in parsing highly subjective visual inputs, the architecture evolved from a baseline ReAct agent (V1) to a deterministic Neuro-Symbolic pipeline (V2).</p>
         
-        <img src="assets/img/ai_aec/diagram/system_architecture.png" alt="System Architecture" class="demo-image">
-
+        <!-- <img src="assets/img/ai_aec/diagram/system_architecture.png" alt="System Architecture" class="demo-image"> -->
+        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline_simplified.png" alt="Neuro-Symbolic Pipeline Sequence">
         <h3>The Baseline: Agent-Driven (V1)</h3>
         <p>Initially deployed as a <strong>LangGraph ReAct agent</strong> utilizing <strong>FastMCP</strong> for dynamic IFC tool calling. While functional out of the box, it proved non-deterministic, suffered from high latency (~4.5s/API call), and remained highly vulnerable to open-domain hallucinations.</p>
 
         <h3>The Solution: Constraints-Driven Neuro-Symbolic Layer</h3>
         <p>The final architecture replaces free-form LLM reasoning with an explicit <strong>constraint extraction → deterministic query planning</strong> pipeline. This effectively bridges the semantic gap between probabilistic visual perception and rigid geometric databases.</p>
 
-        <img src="assets/img/ai_aec/diagram/sequence_v2_pipeline_simplified.png" alt="Neuro-Symbolic Pipeline Sequence">
+        
         <img src="assets/img/ai_aec/screenshots/sample_pipeline.png" alt="Sample Pipeline Execution">
 
         <h4>1. The Neuro Layer (Perception)</h4>
