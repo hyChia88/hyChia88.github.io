@@ -1,101 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internship work at Lennar</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .notes-container { max-width: 80%; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 2em; }
-        h2 { font-size: 180%; margin-top: 1.5em; margin-bottom: 0.5em; }
-        h3 { font-size: 140%; margin-top: 1.2em; margin-bottom: 0.5em; }
-        p { margin-bottom: 0.8em; line-height: 1.6; }
-        ul, ol { margin-bottom: 1em; line-height: 1.8; }
-        li { margin-bottom: 0.5em; }
-        strong { font-weight: 600; }
-        .section-divider { border-top: 1px solid #ddd; margin: 2em 0; }
-        img { max-width: 100%; height: auto; margin: 1.5em 0; border-radius: 8px; }
-        .demo-image { max-width: 90%; margin: 1.5em auto; display: block; }
-        textarea { width: 100%; min-height: 80px; border-radius: 4px; border: 1px solid #ccc; padding: 0.5em; margin-bottom: 1em; }
-        button { background: #2d6cdf; color: #fff; border: none; border-radius: 4px; padding: 0.5em 1.5em; cursor: pointer; }
-        button:hover { background: #1a4fa0; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Internship at Lennar — Applied AI Engineering</title>
+  <link rel="stylesheet" href="article.css">
 </head>
 <body>
-    <nav class="nav-container">
-        <a href="index.html" class="back-link">← Back to Main</a>
-    </nav>
 
-    <div class="notes-container">
-        
-        <h1>🏗️ Internship work at Lennar</h1>
-        <p>
-            This is the documentation of my work at Lennar Corporation. Leveraging LLM to interpret data to manage construction process.
-        </p>
-        <ul style="padding-left:2em;">
-            <li><strong>Technology Stack:</strong> Python, FastAPI, OpenAI APIs, FAISS, LangChain</li>
-            <li><strong>Timeline:</strong> June 2025 - August 2025</li>
-            <li><strong>Role:</strong> Applied AI Engineer Intern</li>
-            <li>
-                <strong>Job description:</strong>
-                <ul style="padding-left:2em;">
-                    <li>Architected scalable FastAPI microservices with object-oriented design supporting multimodal AI workflows, processing 1000+ images with hybrid search (semantic + keyword + reranking) in 240 seconds through async batch processing and efficient API orchestration.</li>
-                    <li>Built high-performance vector database infrastructure using FAISS with O(1) metadata lookup and hybrid retrieval strategies, enabling real-time semantic search across construction domain knowledge with sub-second query response times.</li>
-                    <li>Engineered end-to-end NLP pipeline processing construction conversations into structured data reports using few-shots classification, K-means/HDBSCAN clustering, and RAG framework with LangChain integration, achieving 20k+ text embeddings in under 300 seconds.</li>
-                    <li>Optimized ML system performance through asyncio implementation and concurrent OpenAI's API calls, delivering measurable precision/recall improvements on production-scale noisy text data while maintaining system reliability.</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Project problem statement:</strong>
-                <ul style="padding-left:2em;">
-                    <li>Automated quality control extraction from construction communications: Identify QC issue, extract issue, enrich with details, output issue form</li>
-                    <li>Image parse: keywords labeling for each site image</li>
-                    <li>Document Image Parse: Extract structured data for each document image</li>
-                    <li>ImageSearch that can be searched by Natural Language</li>
-                </ul>
-            </li>
-        </ul>
-        
-    <br>
-        <h3>Project 1: Issue detect and extract</h3>
-        <ol style="padding-left:2em;">
-            <li>
-                <strong>System Architecture:</strong>
-                <ul style="padding-left:2em;">
-                    <li>Input: Single target message, supported by previous messages &amp; external data from existing database</li>
-                    <li>Output: Issue extracted &amp; Evaluation report</li>
-                    <li>Key Features: Data preprocessing, Classification &amp; Clustering, Extraction, Enrichment</li>
-                </ul>
-              </li>
-            <li>
-                <strong>Sample output:</strong>
-                <img src="assets/img/lennar-sampleoutput.png" alt="lennar-sampleoutput" class="demo-image" style="max-width:60%;">
-            </li>
-        </ol>
+<nav class="topnav"><a href="index.html">← Back to Main</a></nav>
 
-    </br>
-        <h3>Project 2: Image search</h3>
-        <ol style="padding-left:2em;">
-            <li>
-                <strong>Overview &amp; Data flow:</strong>
-                <ul style="padding-left:2em;">
-                    <li>Input: Image parse &amp; User query Input</li>
-                    <li>Output: Top k related image</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Key features:</strong>
-                <ul style="padding-left:2em;">
-                    <li>Image Parser: Extracts visual features and metadata from images</li>
-                    <li>Document Image Parser: Analyzes construction documents, QC reports, and forms</li>
-                    <li>Image Search Engine: Enables natural language queries to find relevant images</li>
-                </ul>
-            </li>
-            <li>
-                <strong>Demo with synthetic data:</strong>
-                <img src="assets/img/lennar-demo.png" alt="lennar-demo" style="max-width:100%;margin:1em 0;">
-            </li>
-        </ol>
-    </br>
-            </li>
-        </ol
+<!-- Hero -->
+<header class="hero">
+  <div class="wrap">
+    <h1>Internship at Lennar</h1>
+    <p class="affil">
+      Applied-AI engineering at Lennar Corporation, using LLMs/VLMs to interpret messy construction
+      communications and site imagery, and turn them into structured, searchable project data.</p>
+    <p class="affil">Applied AI Engineer Intern · June – August 2025</p>
+  </div>
+</header>
+
+<!-- Overview -->
+<section>
+  <div class="wrap">
+    <h2><span class="num">Overview</span>Role &amp; scope</h2>
+    <dl class="meta">
+      <dt>Tech stack</dt><dd>Python · FastAPI · OpenAI APIs · FAISS · LangChain</dd>
+      <dt>Timeline</dt><dd>June 2025 – August 2025</dd>
+      <dt>Role</dt><dd>Applied AI Engineer Intern</dd>
+    </dl>
+
+    <h3>What I built</h3>
+    <ul>
+      <li>Architected scalable FastAPI microservices with object-oriented design supporting
+        multimodal AI workflows — processing 1000+ images with hybrid search
+        (semantic + keyword + reranking) in 240 seconds via async batch processing and efficient
+        API orchestration.</li>
+      <li>Built high-performance vector-database infrastructure using FAISS with O(1) metadata
+        lookup and hybrid retrieval, enabling real-time semantic search across construction-domain
+        knowledge with sub-second query response.</li>
+      <li>Engineered an end-to-end NLP pipeline turning construction conversations into structured
+        reports — few-shot classification, K-means / HDBSCAN clustering, and a RAG framework with
+        LangChain — reaching 20k+ text embeddings in under 300 seconds.</li>
+      <li>Optimized ML system performance through asyncio and concurrent OpenAI API calls,
+        delivering measurable precision/recall gains on production-scale noisy text while keeping
+        the system reliable.</li>
+    </ul>
+
+    <h3>Problem statement</h3>
+    <ul>
+      <li>Automated quality-control extraction from construction communications: identify a QC
+        issue, extract it, enrich with details, and output an issue form.</li>
+      <li>Image parsing: keyword labelling for each site image.</li>
+      <li>Document-image parsing: extract structured data from each document image.</li>
+      <li>Image search queryable in natural language.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Project 1 -->
+<section>
+  <div class="wrap">
+    <h2><span class="num">Project 1</span>Issue detect &amp; extract</h2>
+    <div class="cards two">
+      <div class="card">
+        <span class="tag">Input</span>
+        <h3>Site communications</h3>
+        <p>A single target message, supported by previous messages and external data pulled from
+          the existing database.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Output</span>
+        <h3>Issue + evaluation report</h3>
+        <p>The extracted issue plus an evaluation report — produced through data preprocessing,
+          classification &amp; clustering, extraction, and enrichment.</p>
+      </div>
+    </div>
+    <figure>
+      <img src="assets/img/lennar-sampleoutput.png" alt="Sample extracted QC issue output">
+      <figcaption>Sample output: a raw site message resolved into a structured QC issue record.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- Project 2 -->
+<section>
+  <div class="wrap">
+    <h2><span class="num">Project 2</span>Natural-language image search</h2>
+    <p class="lead">
+      Input: parsed images plus a user query. Output: the top-k most relevant images — searchable
+      in plain language, no manual tagging required.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <span class="tag">Module</span>
+        <h3>Image parser</h3>
+        <p>Extracts visual features and metadata from site images.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Module</span>
+        <h3>Document-image parser</h3>
+        <p>Analyzes construction documents, QC reports, and forms.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Module</span>
+        <h3>Search engine</h3>
+        <p>Resolves natural-language queries to the most relevant images.</p>
+      </div>
+    </div>
+    <figure>
+      <img src="assets/img/lennar-demo.png" alt="Image search demo on synthetic construction data">
+      <figcaption>Demo on synthetic data — a natural-language query returning ranked site images.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Chia Hui Yen · <a href="mailto:huiyenc@andrew.cmu.edu">huiyenc@andrew.cmu.edu</a><br>
+    <span style="font-size:.82rem">Internship documentation · figures use synthetic data (no proprietary Lennar content).</span>
+  </div>
+</footer>
+
+</body>
+</html>

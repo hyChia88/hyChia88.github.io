@@ -146,48 +146,6 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('projectGrid');
-            const projects = document.querySelectorAll('.project');
-
-            // Mouse move effect
-            document.addEventListener('mousemove', (e) => {
-                const { clientX, clientY } = e;
-                projects.forEach(project => {
-                    const rect = project.getBoundingClientRect();
-                    const projectCenterX = rect.left + rect.width / 2;
-                    const projectCenterY = rect.top + rect.height / 2;
-
-                    const deltaX = clientX - projectCenterX;
-                    const deltaY = clientY - projectCenterY;
-                    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                    const maxDistance = 300;
-
-                    if (distance < maxDistance) {
-                        const scale = 1 + ((maxDistance - distance) / maxDistance) * 0.05;
-                        project.style.transform = `scale(${scale})`;
-                    } else {
-                        project.style.transform = 'scale(1)';
-                    }
-                });
-            });
-
-            // Image swap on hover
-            projects.forEach(project => {
-                const img = project.querySelector('img');
-                const staticSrc = img.dataset.static;
-                const gifSrc = img.dataset.gif;
-
-                project.addEventListener('mouseenter', () => {
-                    img.src = gifSrc;
-                });
-
-                project.addEventListener('mouseleave', () => {
-                    img.src = staticSrc;
-                });
-            });
-        });
-    
         function toggleCourse(element) {
             // Toggle active class
             element.classList.toggle('active');
