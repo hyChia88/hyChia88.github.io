@@ -775,8 +775,7 @@ h2 {
 }
 
 .course-item {
-    border-bottom: 1px solid var(--background-hover);
-    padding: var(--space-md) var(--space-xs);
+    padding: var(--space-xs) var(--space-xs);
 }
 
 .course-name {
