@@ -1,127 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Internship at Lennar — Applied AI Engineering</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Software engineering internship contributions to construction-information search, structured issue extraction, and output validation at Lennar.">
+  <meta name="theme-color" content="#f8fafc">
+  <title>Lennar internship | Chia Hui Yen</title>
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="article.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-
-<nav class="topnav"><a href="index.html">← Back to Main</a></nav>
-
-<!-- Hero -->
-<header class="hero">
-  <div class="wrap">
-    <h1>Internship at Lennar</h1>
-    <p class="affil">
-      Applied-AI engineering at Lennar Corporation, using LLMs/VLMs to interpret messy construction
-      communications and site imagery, and turn them into structured, searchable project data.</p>
-    <p class="affil">Applied AI Engineer Intern · June – August 2025</p>
-  </div>
-</header>
-
-<!-- Overview -->
-<section>
-  <div class="wrap">
-    <h2><span class="num">Overview</span>Role &amp; scope</h2>
-    <dl class="meta">
-      <dt>Tech stack</dt><dd>Python · FastAPI · OpenAI APIs · FAISS · LangChain</dd>
-      <dt>Timeline</dt><dd>June 2025 – August 2025</dd>
-      <dt>Role</dt><dd>Applied AI Engineer Intern</dd>
-    </dl>
-
-    <h3>What I built</h3>
-    <ul>
-      <li>Architected scalable FastAPI microservices with object-oriented design supporting
-        multimodal AI workflows — processing 1000+ images with hybrid search
-        (semantic + keyword + reranking) in 240 seconds via async batch processing and efficient
-        API orchestration.</li>
-      <li>Built high-performance vector-database infrastructure using FAISS with O(1) metadata
-        lookup and hybrid retrieval, enabling real-time semantic search across construction-domain
-        knowledge with sub-second query response.</li>
-      <li>Engineered an end-to-end NLP pipeline turning construction conversations into structured
-        reports — few-shot classification, K-means / HDBSCAN clustering, and a RAG framework with
-        LangChain — reaching 20k+ text embeddings in under 300 seconds.</li>
-      <li>Optimized ML system performance through asyncio and concurrent OpenAI API calls,
-        delivering measurable precision/recall gains on production-scale noisy text while keeping
-        the system reliable.</li>
-    </ul>
-
-    <h3>Problem statement</h3>
-    <ul>
-      <li>Automated quality-control extraction from construction communications: identify a QC
-        issue, extract it, enrich with details, and output an issue form.</li>
-      <li>Image parsing: keyword labelling for each site image.</li>
-      <li>Document-image parsing: extract structured data from each document image.</li>
-      <li>Image search queryable in natural language.</li>
-    </ul>
-  </div>
-</section>
-
-<!-- Project 1 -->
-<section>
-  <div class="wrap">
-    <h2><span class="num">Project 1</span>Issue detect &amp; extract</h2>
-    <div class="cards two">
-      <div class="card">
-        <span class="tag">Input</span>
-        <h3>Site communications</h3>
-        <p>A single target message, supported by previous messages and external data pulled from
-          the existing database.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Output</span>
-        <h3>Issue + evaluation report</h3>
-        <p>The extracted issue plus an evaluation report — produced through data preprocessing,
-          classification &amp; clustering, extraction, and enrichment.</p>
-      </div>
-    </div>
-    <figure class="fig-sm">
-      <img src="assets/img/lennar-sampleoutput.png" alt="Sample extracted QC issue output">
-      <figcaption>Sample output: a raw site message resolved into a structured QC issue record.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<!-- Project 2 -->
-<section>
-  <div class="wrap">
-    <h2><span class="num">Project 2</span>Natural-language image search</h2>
-    <p class="lead">
-      Input: parsed images plus a user query. Output: the top-k most relevant images — searchable
-      in plain language, no manual tagging required.
-    </p>
-    <div class="cards">
-      <div class="card">
-        <span class="tag">Module</span>
-        <h3>Image parser</h3>
-        <p>Extracts visual features and metadata from site images.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Module</span>
-        <h3>Document-image parser</h3>
-        <p>Analyzes construction documents, QC reports, and forms.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Module</span>
-        <h3>Search engine</h3>
-        <p>Resolves natural-language queries to the most relevant images.</p>
-      </div>
-    </div>
-    <figure>
-      <img src="assets/img/lennar-demo.png" alt="Image search demo on synthetic construction data">
-      <figcaption>Demo on synthetic data — a natural-language query returning ranked site images.</figcaption>
-    </figure>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    Chia Hui Yen · <a href="mailto:huiyenc@andrew.cmu.edu">huiyenc@andrew.cmu.edu</a><br>
-    <span style="font-size:.82rem">Internship documentation · figures use synthetic data (no proprietary Lennar content).</span>
-  </div>
-</footer>
-
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="wordmark" href="index.html" aria-label="Chia Hui Yen, home">CHIA HUI YEN<span class="wordmark-dot" aria-hidden="true">.</span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html#experience">Experience</a>
+      <a href="index.html#work">Work</a>
+      <a href="cs-projects.html">Background</a>
+      <a href="index.html#contact">Contact <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+  <main id="main" tabindex="-1">
+  <article class="case-study wrap"><a class="back-link" href="index.html#experience">← Experience</a>
+    <header class="case-hero"><p class="eyebrow">WORK EXPERIENCE · JUN – AUG 2025</p><h1>Lennar</h1><p class="case-deck">Making field information searchable and structured.</p><p class="role">Software Engineer Intern (AI/ML) · San Francisco, CA</p><p class="case-intro">Construction photos, documents, and conversations contain useful project information in different forms. My internship focused on search and extraction workflows that made this information easier for downstream applications to consume.</p></header>
+    <section class="case-section"><p class="eyebrow">01 / SEARCH</p><h2>Find information across photos and documents.</h2><p>Built search workflows that made construction photos and documents retrievable using text and semantic queries, supporting field-information lookup.</p><p>Worked on asynchronous ingestion and processing to connect unstructured inputs with searchable information.</p></section>
+    <section class="case-section"><p class="eyebrow">02 / STRUCTURED EXTRACTION</p><h2>Turn field conversations into usable records.</h2><p>Developed extraction workflows that converted field conversations into structured issue records. Added output validation so downstream workflows could consume consistent fields.</p></section>
+    <section class="case-section"><p class="eyebrow">03 / VALIDATION</p><h2>Check meaning as well as format.</h2><p>Used domain-specific evaluation to identify extraction errors and assess output consistency. A structurally valid record can still misinterpret the source, so evaluation needs to address both requirements.</p></section>
+    <nav class="case-next" aria-label="Related work"><a href="index.html#experience">← Experience</a><a href="ai_aec_interpreter.html">Independent research: AEC Interpreter <span aria-hidden="true">→</span></a></nav>
+  </article>
+</main>
+  <footer class="site-footer">
+    <a class="footer-name" href="index.html">Chia Hui Yen</a>
+    <p>Software engineering · AI systems · Built environment</p>
+    <a href="mailto:huiyenc@andrew.cmu.edu">Get in touch <span aria-hidden="true">↗</span></a>
+  </footer>
 </body>
 </html>
