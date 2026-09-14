@@ -126,10 +126,10 @@ document.addEventListener('click', (event) => {
   },
   "cad": {
     "title": "CAD-MLLM reprod + autocompletion",
-    "label": "CAD-MLLM",
+    "label": "CAD-MLLM reprod",
     "category": "software",
     "categoryTitle": "Software Engineering, AI/ML Practice...",
-    "description": "CAD-MLLM, (Multimodal Large Language Model) Collab work with Ethan Di, Karthick, David Chen",
+    "description": "CAD-MLLM reprod, (Multimodal Large Language Model) Collab work with Ethan Di, Karthick, David Chen",
     "image": "assets/img/cad_mllm.png",
     "alt": "CAD-MLLM Architecture Project",
     "links": [
