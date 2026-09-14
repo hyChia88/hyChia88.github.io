@@ -137,7 +137,7 @@ h3{font-size:1.5rem}
 #roof-toggle{display:flex;gap:7px;align-items:center}#roof-toggle>span:first-child{font-size:18px;line-height:1}
 .control-divider{height:15px;width:1px;background:#d6dbd0}
 .scene-hint{position:absolute;bottom:21px;width:100%;text-align:center;font-size:9px;color:#8a8d83;letter-spacing:.02em}
-.scene-hint>span:first-child{font-size:15px;margin-right:4px}.hint-dot{padding:0 7px}
+
 .scene-signature{position:absolute;right:4%;bottom:115px;font-size:7px;line-height:1.7;letter-spacing:.15em;color:#8f9487;transform:rotate(-7deg);pointer-events:none}
 .scene-signature span{position:absolute;left:-29px;top:3px;font-size:26px;font-family:Georgia,serif}
 .scene-fallback{position:absolute;top:46%;left:20%;max-width:270px;background:#fafbf8e8;padding:26px;border:1px solid white;border-radius:22px;font-size:18px;color:#59694e}
@@ -255,7 +255,7 @@ h3{font-size:1.5rem}
 .scene-zoom button:hover:not(:disabled){background:#ddeae3}
 .scene-zoom button:disabled{opacity:.3;cursor:default}
 .scene-zoom output{min-width:39px;text-align:center;font-size:10px;font-variant-numeric:tabular-nums;color:#6f7f73}
-@media(max-width:760px){.scene-zoom{top:3px;right:16px}.scene-zoom button{width:36px;height:36px}.scene-hint{font-size:7px;letter-spacing:0}.hint-dot{padding:0 4px}}
+@media(max-width:760px){.scene-zoom{top:3px;right:16px}.scene-zoom button{width:36px;height:36px}.scene-hint{font-size:7px;letter-spacing:0}}
 @media print{.scene-zoom{display:none!important}}
 
 /* A page-sized canvas lets the model grow beyond its original column without moving the layout. */
@@ -283,6 +283,4 @@ h3{font-size:1.5rem}
   .scene-glow{display:none}
 }
 
-/* Keep the desktop pan shortcut legible without crowding the touch instructions. */
 @media(min-width:761px){.scene-hint{font-size:8px;letter-spacing:0}}
-@media(hover:none),(max-width:760px){.pan-hint{display:none}}
