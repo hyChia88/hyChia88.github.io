@@ -282,3 +282,7 @@ h3{font-size:1.5rem}
   .scene-hint{bottom:59px}
   .scene-glow{display:none}
 }
+
+/* Keep the desktop pan shortcut legible without crowding the touch instructions. */
+@media(min-width:761px){.scene-hint{font-size:8px;letter-spacing:0}}
+@media(hover:none),(max-width:760px){.pan-hint{display:none}}

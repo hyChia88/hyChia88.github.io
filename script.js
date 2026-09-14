@@ -899,7 +899,7 @@ document.addEventListener('click', (event) => {
     }
     meshes.push(...animatedMeshes);
 
-    const initial = { yaw:.57, pitch:.38, zoom:.62, roof:0, x:0, y:2.1, z:.2 };
+    const initial = { yaw:.57, pitch:.38, zoom:.62, roof:0, x:0, y:2.1, z:.2, panX:0, panY:0 };
     const exposure = {house:1,software:1,computational:1,fabrication:1};
     const target = { ...initial };
     const current = { ...initial };
@@ -1004,8 +1004,8 @@ document.addEventListener('click', (event) => {
       center=[current.x,current.y,current.z];
       const centerX=center.reduce((sum,n,i)=>sum+n*right[i],0);
       const centerY=center.reduce((sum,n,i)=>sum+n*up[i],0);
-      screenOffset=[(anchorX-width/2-(midX-centerX)*scale)*2/width,
-        (height/2-anchorY-(midY-centerY)*scale)*2/height];
+      screenOffset=[(anchorX+current.panX-width/2-(midX-centerX)*scale)*2/width,
+        (height/2-anchorY-current.panY-(midY-centerY)*scale)*2/height];
       gl.viewport(0,0,canvas.width,canvas.height);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
       gl.uniform3fv(uniforms.cameraRight,right);
@@ -1127,7 +1127,7 @@ document.addEventListener('click', (event) => {
     // Zoom is relative to each view so entering a gallery starts at 100%.
     function zoomLimits() {
       const base=activeCategory ? rooms[activeCategory].zoom : initial.zoom;
-      return {base,min:base*.65,max:base*1.85};
+      return {base,min:base*.65,max:base*4};
     }
     const zoomIn=document.getElementById('zoom-in');
     const zoomOut=document.getElementById('zoom-out');
@@ -1152,7 +1152,8 @@ document.addEventListener('click', (event) => {
       if(drag) drag.moved=true;
     },{passive:false});
 
-    // A tap selects; one pointer drags; two pointers pinch without selecting on release.
+    // Drag orbits, Shift + drag pans in screen pixels, and two pointers pinch.
+    // Modified clicks and completed gestures never select a project.
     let drag=null, pinch=null;
     const pointers=new Map();
     const pointerDistance=()=>{
@@ -1160,11 +1161,11 @@ document.addEventListener('click', (event) => {
       return Math.hypot(a.x-b.x,a.y-b.y);
     };
     function beginDrag(point,moved=false) {
-      return {...point,yaw:target.yaw,pitch:target.pitch,moved};
+      return {...point,yaw:target.yaw,pitch:target.pitch,panX:target.panX,panY:target.panY,moved};
     }
     canvas.addEventListener('pointerdown',event=>{
       if(event.button!==0 || pointers.size>=2) return;
-      const point={id:event.pointerId,x:event.clientX,y:event.clientY};
+      const point={id:event.pointerId,x:event.clientX,y:event.clientY,pan:event.shiftKey};
       pointers.set(event.pointerId,point);
       canvas.setPointerCapture(event.pointerId);
       if(pointers.size===2) {
@@ -1184,8 +1185,13 @@ document.addEventListener('click', (event) => {
           const dx=event.clientX-drag.x,dy=event.clientY-drag.y;
           if(Math.hypot(dx,dy)>6) drag.moved=true;
           if(drag.moved) {
-            target.yaw=drag.yaw+dx*.006;
-            target.pitch=drag.pitch+dy*.006;
+            if(drag.pan) {
+              target.panX=drag.panX+dx;
+              target.panY=drag.panY+dy;
+            } else {
+              target.yaw=drag.yaw+dx*.006;
+              target.pitch=drag.pitch+dy*.006;
+            }
             highlight(null);schedule();
           }
         }
@@ -1193,7 +1199,7 @@ document.addEventListener('click', (event) => {
     });
     function finishPointer(event,allowClick) {
       if(!pointers.has(event.pointerId)) return;
-      const clicked=allowClick&&!pinch&&drag?.id===event.pointerId&&!drag.moved;
+      const clicked=allowClick&&!pinch&&drag?.id===event.pointerId&&!drag.moved&&!drag.pan;
       pointers.delete(event.pointerId);
       pinch=null;
       const remaining=[...pointers.values()][0];
